@@ -1151,13 +1151,14 @@ img {
   height: 90vh;
   overflow: hidden;
 }
+.video-media img {
+  height: 100%;
+  width: 100%;
+}
 .video-media video {
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  min-width: 100%;
-  min-height: 100%;
+  left: 100%;
 }
 .video-overlay {
   position: absolute;
@@ -1289,6 +1290,13 @@ img {
   content: "";
   display: table;
   clear: both;
+}
+.article-meta .article-time {
+  margin-left: 10%;
+  color: #9c948d;
+}
+.article-meta span {
+  color: #9c948d;
 }
 .article-date::before {
   content: '\f10f';
