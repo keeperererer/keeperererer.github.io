@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    async/await |
+    
+    Now you can see me</title>
+  
+    <link rel="shortcut icon" href="/cat.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+</head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-async-await" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      async/await
+    </h1>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/04/13/async-await/" class="article-date">
+  <time datetime="2019-04-13T13:43:37.000Z" itemprop="datePublished">2019-04-13</time>
+</a>
+        
+        <span class="article-time">读完需要大约
+        9</span>
+        <span>分钟</span>
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h2 id="关于async-await执行顺序"><a href="#关于async-await执行顺序" class="headerlink" title="关于async/await执行顺序"></a>关于async/await执行顺序</h2><h3 id="首先是因为一个关于事件循环的面试题"><a href="#首先是因为一个关于事件循环的面试题" class="headerlink" title="首先是因为一个关于事件循环的面试题"></a>首先是因为一个关于事件循环的面试题</h3><a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">async function async1() &#123;</span><br><span class="line">    console.log(&apos;async1 start&apos;);</span><br><span class="line">    await async2();</span><br><span class="line">    console.log(&apos;async1 end&apos;);</span><br><span class="line">&#125;</span><br><span class="line">async function async2() &#123;</span><br><span class="line">	console.log(&apos;async2&apos;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">console.log(&apos;script start&apos;);</span><br><span class="line"></span><br><span class="line">setTimeout(function() &#123;</span><br><span class="line">    console.log(&apos;setTimeout&apos;);</span><br><span class="line">&#125;, 0)</span><br><span class="line"></span><br><span class="line">async1();</span><br><span class="line"></span><br><span class="line">new Promise(function(resolve) &#123;</span><br><span class="line">    console.log(&apos;promise1&apos;);</span><br><span class="line">    resolve();</span><br><span class="line">&#125;).then(function() &#123;</span><br><span class="line">    console.log(&apos;promise2&apos;);</span><br><span class="line">&#125;);</span><br><span class="line">console.log(&apos;script end&apos;);</span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line">script start</span><br><span class="line">async1 start</span><br><span class="line">async2</span><br><span class="line">promise1</span><br><span class="line">script end</span><br><span class="line">async1 end</span><br><span class="line">promise2</span><br><span class="line">setTimeout</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<h4 id="说一下宏任务"><a href="#说一下宏任务" class="headerlink" title="说一下宏任务"></a>说一下宏任务</h4><p>可以理解是每次执行栈执行的代码就是一个宏任务。<br>浏览器为了能够使得js内部宏任务与DOM任务能够有序的执行，<strong>会在一个(macro)task执行结束后，在下一个(macro)task 执行开始前，对页面进行重新渲染</strong>，流程为：<br><code>(macro)task -&gt; 渲染 -&gt;(macro)task-&gt;...</code></p>
+<p>(macro)task主要包含：script(整体代码)、setTimeout、setInterval、I/O、UI交互事件、postMessage、MessageChannel、setImmediate(Node.js 环境)</p>
+<h4 id="说一下微任务"><a href="#说一下微任务" class="headerlink" title="说一下微任务"></a>说一下微任务</h4><p>microtask（又称为微任务），<strong>可以理解是在当前 task 执行结束后立即执行的任务。</strong>也就是说，在当前task任务后，下一个task之前，在渲染之前。</p>
+<p>所以它的响应速度相比setTimeout（setTimeout是task）会更快，因为无需等渲染。也就是说，在某一个macrotask执行完后，就会将在它执行期间产生的所有microtask都执行完毕（在渲染前）。</p>
+<p>microtask主要包含：Promise.then、MutaionObserver、process.nextTick(Node.js 环境)</p>
+<hr>
+<p><strong>执行（每个）宏任务之前都会检查有没有微任务需要执行，如果有就会把微任务执行了再执行。</strong></p>
+<hr>
+<h4 id="Promise和async中的立即执行"><a href="#Promise和async中的立即执行" class="headerlink" title="Promise和async中的立即执行"></a>Promise和async中的立即执行</h4><p>Promise中的异步体现在<code>then和catch</code>中，所以写在Promise中的代码是被当做同步任务立即执行的。而在async/await中，在出现await出现之前，其中的代码也是立即执行的。</p>
+<h4 id="await做了什么"><a href="#await做了什么" class="headerlink" title="await做了什么"></a>await做了什么</h4><p>从字面意思上看await就是等待，await 等待的是一个表达式，这个表达式的返回值可以是一个promise对象也可以是其他值。</p>
+<p>很多人以为await会一直等待之后的表达式执行完之后才会继续执行后面的代码，<strong>实际上await是一个让出线程的标志。await后面的表达式会先执行一遍，将await后面的代码加入到microtask中(因为async await本身就是promise+generator的语法糖)，然后就会跳出整个async函数来执行后面的代码。</strong><br>所以题中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">async function async1() &#123;</span><br><span class="line">	console.log(&apos;async1 start&apos;);</span><br><span class="line">	await async2();</span><br><span class="line">	console.log(&apos;async1 end&apos;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>等价于<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">async function async1() &#123;</span><br><span class="line">	console.log(&apos;async1 start&apos;);</span><br><span class="line">	Promise.resolve(async2()).then(() =&gt; &#123;</span><br><span class="line">                console.log(&apos;async1 end&apos;);</span><br><span class="line">        &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>所以本题的执行顺序为：<br>执行<code>script start</code>-&gt;遇到setTimeout,将它放入宏任务队列中-&gt;遇到async1(),执行它的同步代码,<code>async1 start</code>以及跟在await屁股后面的代码，这里是个函数async2(),执行<code>async2</code>,后面那句console.log(‘async1 end’)则被让出线程放入微任务队列中-&gt;继续执行promise中的同步代码<code>promise1</code>,.then后的代码放出微任务队列中-&gt;继续执行<code>script end</code>-&gt;同步代码执行完毕，再执行异步代码，先微任务队列中的<code>async1 end</code>再<code>promise2</code>,最后宏任务队列中的<code>setTimeout</code>。<br>即为：<br><code>script start -- async1 start -- async2 --promise1 -- script end -- aync1 end -- promise2 -- setTimeout</code></p>
+<h5 id="再做几个题"><a href="#再做几个题" class="headerlink" title="再做几个题:"></a>再做几个题:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">async function async1() &#123;</span><br><span class="line">    console.log(&apos;async1 start&apos;);</span><br><span class="line">    await async2();</span><br><span class="line">    console.log(&apos;async1 end&apos;);</span><br><span class="line">&#125;</span><br><span class="line">async function async2() &#123;</span><br><span class="line">    //async2做出如下更改：</span><br><span class="line">    new Promise(function(resolve) &#123;</span><br><span class="line">    console.log(&apos;promise1&apos;);</span><br><span class="line">    resolve();</span><br><span class="line">&#125;).then(function() &#123;</span><br><span class="line">    console.log(&apos;promise2&apos;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line">console.log(&apos;script start&apos;);</span><br><span class="line"></span><br><span class="line">setTimeout(function() &#123;</span><br><span class="line">    console.log(&apos;setTimeout&apos;);</span><br><span class="line">&#125;, 0)</span><br><span class="line">async1();</span><br><span class="line"></span><br><span class="line">new Promise(function(resolve) &#123;</span><br><span class="line">    console.log(&apos;promise3&apos;);</span><br><span class="line">    resolve();</span><br><span class="line">&#125;).then(function() &#123;</span><br><span class="line">    console.log(&apos;promise4&apos;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">console.log(&apos;script end&apos;);</span><br></pre></td></tr></table></figure>
+<p>根据以上的分析很容易得出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">script start</span><br><span class="line">async1 start</span><br><span class="line">promise1</span><br><span class="line">promise3</span><br><span class="line">script end</span><br><span class="line">promise2</span><br><span class="line">async1 end</span><br><span class="line">promise4</span><br><span class="line">setTimeout</span><br></pre></td></tr></table></figure></p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">async function async1() &#123;</span><br><span class="line">    console.log(&apos;async1 start&apos;);</span><br><span class="line">    await async2();</span><br><span class="line">    //更改如下：</span><br><span class="line">    setTimeout(function() &#123;</span><br><span class="line">        console.log(&apos;setTimeout1&apos;)</span><br><span class="line">    &#125;,0)</span><br><span class="line">&#125;</span><br><span class="line">async function async2() &#123;</span><br><span class="line">    //更改如下：</span><br><span class="line">	setTimeout(function() &#123;</span><br><span class="line">		console.log(&apos;setTimeout2&apos;)</span><br><span class="line">	&#125;,0)</span><br><span class="line">&#125;</span><br><span class="line">console.log(&apos;script start&apos;);</span><br><span class="line"></span><br><span class="line">setTimeout(function() &#123;</span><br><span class="line">    console.log(&apos;setTimeout3&apos;);</span><br><span class="line">&#125;, 0)</span><br><span class="line">async1();</span><br><span class="line"></span><br><span class="line">new Promise(function(resolve) &#123;</span><br><span class="line">    console.log(&apos;promise1&apos;);</span><br><span class="line">    resolve();</span><br><span class="line">&#125;).then(function() &#123;</span><br><span class="line">    console.log(&apos;promise2&apos;);</span><br><span class="line">&#125;);</span><br><span class="line">console.log(&apos;script end&apos;);</span><br></pre></td></tr></table></figure>
+<p>结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">script start</span><br><span class="line">async1 start</span><br><span class="line">promise1</span><br><span class="line">script end</span><br><span class="line">promise2</span><br><span class="line">setTimeout3</span><br><span class="line">setTimeout2</span><br><span class="line">setTimeout1</span><br></pre></td></tr></table></figure></p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">async function a1 () &#123;</span><br><span class="line">    console.log(&apos;a1 start&apos;)</span><br><span class="line">    await a2()</span><br><span class="line">    console.log(&apos;a1 end&apos;)</span><br><span class="line">&#125;</span><br><span class="line">async function a2 () &#123;</span><br><span class="line">    console.log(&apos;a2&apos;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">console.log(&apos;script start&apos;)</span><br><span class="line"></span><br><span class="line">setTimeout(() =&gt; &#123;</span><br><span class="line">    console.log(&apos;setTimeout&apos;)</span><br><span class="line">&#125;, 0)</span><br><span class="line"></span><br><span class="line">Promise.resolve().then(() =&gt; &#123;</span><br><span class="line">    console.log(&apos;promise1&apos;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">a1()</span><br><span class="line"></span><br><span class="line">let promise2 = new Promise((resolve) =&gt; &#123;</span><br><span class="line">    resolve(&apos;promise2.then&apos;)</span><br><span class="line">    console.log(&apos;promise2&apos;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">promise2.then((res) =&gt; &#123;</span><br><span class="line">    console.log(res)</span><br><span class="line">    Promise.resolve().then(() =&gt; &#123;</span><br><span class="line">        console.log(&apos;promise3&apos;)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line">console.log(&apos;script end&apos;)</span><br></pre></td></tr></table></figure>
+<p>结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">script start</span><br><span class="line">a1 start</span><br><span class="line">a2</span><br><span class="line">promise2</span><br><span class="line">script end</span><br><span class="line">promise1</span><br><span class="line">a1 end</span><br><span class="line">promise2.then</span><br><span class="line">promise3</span><br><span class="line">setTimeout</span><br></pre></td></tr></table></figure></p>
+<p><img src="../../images/async-await1.png" alt="图片"></p>
+<h2 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h2><ul>
+<li>async做了一件什么事情？</li>
+<li>await在等什么？</li>
+<li>await等到之后，做了一件什么事情？</li>
+<li>async/await比promise有哪些优势？</li>
+</ul>
+<blockquote>
+<p>async做了一件什么事情？</p>
+</blockquote>
+<p><strong>一句话概括：带 async 关键字的函数，它使得你的函数的返回值必定是 promise 对象</strong><br>也就是</p>
+<p>如果async关键字函数返回的不是promise，会自动用Promise.resolve()包装</p>
+<p>如果async关键字函数显式地返回promise，那就以你返回的promise为准</p>
+<p>这是一个简单的例子，可以看到 async 关键字函数和普通函数的返回值的区别<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">async function fn1()&#123;</span><br><span class="line">    return 123</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function fn2()&#123;</span><br><span class="line">    return 123</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">console.log(fn1())</span><br><span class="line">console.log(fn2())</span><br><span class="line"></span><br><span class="line">Promise &#123;&lt;resolved&gt;: 123&#125;</span><br><span class="line"></span><br><span class="line">123</span><br></pre></td></tr></table></figure></p>
+<p>所以你看，async 函数也没啥了不起的，以后看到带有 async 关键字的函数也不用慌张，你就想它无非就是把return值包装了一下，其他就跟普通函数一样。<br>关于async关键字还有那些要注意的？</p>
+<ul>
+<li>在语义上要理解，async表示函数内部有异步操作</li>
+<li>另外注意，一般 await 关键字要在 async 关键字函数的内部，await 写在外面会报错。</li>
+</ul>
+<blockquote>
+<p>await在等什么？</p>
+</blockquote>
+<p><strong>一句话概括： await等的是右侧「表达式」的结果</strong><br>也就是说，</p>
+<p>右侧如果是函数，那么函数的return值就是「表达式的结果」</p>
+<p>右侧如果是一个 ‘hello’ 或者什么值，那表达式的结果就是 ‘hello’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">async function async1() &#123;</span><br><span class="line">    console.log( &apos;async1 start&apos; )</span><br><span class="line">    await async2()</span><br><span class="line">    console.log( &apos;async1 end&apos; )</span><br><span class="line">&#125;</span><br><span class="line">async function async2() &#123;</span><br><span class="line">    console.log( &apos;async2&apos; )</span><br><span class="line">&#125;</span><br><span class="line">async1()</span><br><span class="line">console.log( &apos;script start&apos; )</span><br></pre></td></tr></table></figure></p>
+<p>await会让出线程，阻塞后面的代码，那么是怎么让出线程呢？<br>‘async2’和’script start’谁会先打印呢？<br>语句 await async2()是怎么执行呢？<br>实践结论是，<strong>从右往左执行，先执行async2后，发现有await关键字，于是让出线程，阻塞代码</strong></p>
+<blockquote>
+<p>await等到之后，做了一件什么事情？</p>
+</blockquote>
+<p>那么await右侧表达式的结果就是它要等的东西。<br>等到之后，对于await来说，分2个情况</p>
+<ul>
+<li>不是promise对象</li>
+<li>是promise对象</li>
+</ul>
+<p>如果它等到的不是一个 Promise 对象，那 await 表达式的运算结果就是它等到的东西。<br>如果它等到的是一个 Promise 对象，await 就忙起来了，它会阻塞后面的代码，等着 Promise 对象 resolve，然后得到 resolve 的值，作为 await 表达式的运算结果。</p>
+<blockquote>
+<p>看到上面的阻塞一词，心慌了吧……放心，这就是 await 必须用在 async 函数中的原因。async 函数调用不会造成阻塞，它内部所有的阻塞都被封装在一个 Promise 对象中异步执行。</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>async/await比promise有哪些优势？</p>
+</blockquote>
+<p>async/await 的优势在于处理 then 链。<br>单一的 Promise 链并不能发现 async/await 的优势，但是，如果需要处理由多个 Promise 组成的 then 链的时候，优势就能体现出来了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 传入参数 n，表示这个函数执行的时间（毫秒）</span><br><span class="line"> * 执行的结果是 n + 200，这个值将用于下一步骤</span><br><span class="line"> */</span><br><span class="line">function takeLongTime(n) &#123;</span><br><span class="line">    return new Promise(resolve =&gt; &#123;</span><br><span class="line">        setTimeout(() =&gt; resolve(n + 200), n);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function step1(n) &#123;</span><br><span class="line">    console.log(`step1 with $&#123;n&#125;`);</span><br><span class="line">    return takeLongTime(n);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function step2(n) &#123;</span><br><span class="line">    console.log(`step2 with $&#123;n&#125;`);</span><br><span class="line">    return takeLongTime(n);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function step3(n) &#123;</span><br><span class="line">    console.log(`step3 with $&#123;n&#125;`);</span><br><span class="line">    return takeLongTime(n);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">现在用 Promise 方式来实现这三个步骤的处理</span><br><span class="line"></span><br><span class="line">function doIt() &#123;</span><br><span class="line">    console.time(&quot;doIt&quot;);</span><br><span class="line">    const time1 = 300;</span><br><span class="line">    step1(time1)</span><br><span class="line">        .then(time2 =&gt; step2(time2))</span><br><span class="line">        .then(time3 =&gt; step3(time3))</span><br><span class="line">        .then(result =&gt; &#123;</span><br><span class="line">            console.log(`result is $&#123;result&#125;`);</span><br><span class="line">            console.timeEnd(&quot;doIt&quot;);</span><br><span class="line">        &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">doIt();</span><br><span class="line">// step1 with 300</span><br><span class="line">// step2 with 500</span><br><span class="line">// step3 with 700</span><br><span class="line">// result is 900</span><br><span class="line">// doIt: 1507.251ms</span><br><span class="line"></span><br><span class="line">输出结果 result 是 step3() 的参数 700 + 200 = 900。</span><br><span class="line">doIt() 顺序执行了三个步骤，一共用了 300 + 500 + 700 = 1500 毫秒，</span><br><span class="line">和 console.time()/console.timeEnd() 计算的结果一致。</span><br><span class="line"></span><br><span class="line">如果用 async/await 来实现呢，会是这样</span><br><span class="line"></span><br><span class="line">async function doIt() &#123;</span><br><span class="line">    console.time(&quot;doIt&quot;);</span><br><span class="line">    const time1 = 300;</span><br><span class="line">    const time2 = await step1(time1);</span><br><span class="line">    const time3 = await step2(time2);</span><br><span class="line">    const result = await step3(time3);</span><br><span class="line">    console.log(`result is $&#123;result&#125;`);</span><br><span class="line">    console.timeEnd(&quot;doIt&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">doIt();</span><br><span class="line"></span><br><span class="line">结果和之前的 Promise 实现是一样的，但是这个代码看起来是不是清晰得多，几乎跟同步代码一样</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/04/13/async-await/" data-id="cjugg7vum000464tj9urjcklm" class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+    
+      <a href="/2019/04/10/foot/" class="article-nav-link">
+        <strong class="article-nav-caption">Olde posts</strong>
+        <div class="article-nav-title">foot</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <!-- <ul class="list-inline">
+      <li>&copy; 2019 Now you can see me</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul> -->
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/cat.svg" alt="Now you can see me"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/search.js"></script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>
