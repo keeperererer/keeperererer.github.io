@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    vue组件通信 |
+    
+    Now you can see me</title>
+  
+    <link rel="shortcut icon" href="/cat.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+</head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-vue组件通信" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      vue组件通信
+    </h1>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/04/17/vue组件通信/" class="article-date">
+  <time datetime="2019-04-17T04:35:28.000Z" itemprop="datePublished">2019-04-17</time>
+</a>
+        
+        <span class="article-time">读完需要大约
+        6</span>
+        <span>分钟</span>
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h2 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h2><blockquote>
+<p>组件是可以复用的Vue实例</p>
+</blockquote>
+<p>在Vue中，根据注册方式的不同，可以分为：</p>
+<ul>
+<li>局部组件（局部注册）</li>
+<li>全局组件（全局注册）</li>
+</ul>
+<a id="more"></a>
+<p>顾名思义，全局注册的组件，可以用在 Vue 实例的任意模板中。但是带来的隐患是，在 webpack 模块化构建时，即便你没有在项目中使用这个组件，依然会打包到最终的项目代码中。而局部组件，则需要在使用到的实例中注册该组件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// 全局注册</span><br><span class="line">// install.js</span><br><span class="line">import Icon from &apos;./Icon.vue&apos;;</span><br><span class="line">const install = &#123;</span><br><span class="line">    install:function(Vue)&#123;</span><br><span class="line">        Vue.component(&apos;VIcon&apos;, Icon);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">export default install;</span><br><span class="line">// main.js</span><br><span class="line">import install from &apos;./install.js&apos;; // 引入全局插件</span><br><span class="line">Vue.use(install); // 注册</span><br><span class="line"></span><br><span class="line">// 局部注册</span><br><span class="line">import VIcon from &apos;./Icon.vue&apos;;</span><br><span class="line">export default&#123;</span><br><span class="line">    components: &#123;</span><br><span class="line">        VIcon</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 使用</span><br><span class="line">&lt;v-icon&gt; &lt;/v-icon&gt;</span><br></pre></td></tr></table></figure></p>
+<p>根据应用场景的不同，又可以分为：</p>
+<ul>
+<li>页面组件：我们使用 Vue 时，每个路由代表的页面，都可以称之为组件。</li>
+<li>基础组件：就像上面栗子中的 Icon 组件，就是一个典型的基础组件。基本上不掺杂业务逻辑，在项目中可能被大量使用，易于移植。类似的基础组件还有 Button、Input 等，常见于各类 UI 组件库。</li>
+<li>业务组件：业务组件和项目具体的业务逻辑有大量耦合，一般抽离于当前项目。</li>
+</ul>
+<p>以上就是组件的简单介绍，那我们到底为什么要推崇组件化？组件化有什么好处？复用？我个人认为组件化最大的好处，便是解耦，易于项目管理。所以在大型项目管理中，组件化是非常有必要的。当然，这并不是今天学习的重点，以后有机会再聊。<br>正因为在 Vue 中处处都是组件，而我们也偏向于组件化、模块化。那我们在一堆组件中，便需要解决一个问题 — 组件间通信。下面，我们就进入今天的主题，Vue 的组件间通信。</p>
+<hr>
+<h3 id="组件间通信"><a href="#组件间通信" class="headerlink" title="组件间通信"></a>组件间通信</h3><hr>
+<h4 id="Props"><a href="#Props" class="headerlink" title="Props"></a>Props</h4><p>Vue 中，最基本的通信方式就是 Props，它是父子组件通信中父组件传值给子组件的一种方式。它允许以数组形式接收，但是更推荐你开启类型检查的形式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">//communication.vue</span><br><span class="line">&lt;communication-sub v-bind=&quot;dataProps&quot;&gt;&lt;/communication-sub&gt;</span><br><span class="line">//v-bind=&quot;dataProps&quot;等同于:title=&quot;title&quot;，适用于多个参数一起传递</span><br><span class="line">...</span><br><span class="line">data()&#123;</span><br><span class="line">	return &#123;</span><br><span class="line">		dataProps:&#123;</span><br><span class="line">			title:&apos;我是父组件的值&apos;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">//communication-sub.vue</span><br><span class="line">&lt;div class=&quot;communication-sub&quot;&gt;</span><br><span class="line">	&#123;&#123;title&#125;&#125;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">...</span><br><span class="line">props:[&apos;title&apos;]</span><br><span class="line">//更推荐开启类型检查</span><br><span class="line">props:&#123;</span><br><span class="line">	title:&#123;</span><br><span class="line">		type:String,</span><br><span class="line">		required:true,</span><br><span class="line">		default:&apos;&apos;//允许指定默认值，引用类型需要函数返回</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>我们都知道，Props 是单向数据流，这是 Vue 为了避免子组件意外改变父组件的状态，从而导致数据流向难以理解而做出的限制。所以 Vue 推荐需要改动的时候，通过改变父组件的值从而触发 Props 的响应。或者，我们可以在接收非引用类型的值时，使用子组件自身的 data 做一次接收。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">props: [&apos;title&apos;],</span><br><span class="line">data: function () &#123;</span><br><span class="line">  return &#123;</span><br><span class="line">    text: this.title</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>为什么是非引用类型呢，因为在 JavaScript 中，引用类型的赋值，实际是内存地址的传递。所以上面栗子中的简单赋值，显然会指向同一个内存地址，所以如果是数组或是对象，你可能需要一次深拷贝。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let obj = JSON.parse(JSON.stringify(obj));</span><br></pre></td></tr></table></figure></p>
+<p>上面这个操作有一些缺陷，不能序列化函数、undefined、循环引用等.<br>事实上，在 Props 是引用类型时，单独修改对象、数组的某个属性或下标，Vue 并不会抛出错误。当然，前提是你要非常清楚自己在做什么，并写好注释，防止你的小伙伴们疑惑。<br>有的同学可能知道，在组件上绑定的属性，如果没有在组件内部用 Props 声明，会默认绑定到组件的根元素上去。还是之前的栗子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;communication-sub v-bind=&quot;dataProps&quot; class=&quot;one&quot; type=&quot;div&quot;&gt;&lt;/communication-sub&gt;</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/3/23/169aac7ab36950d2?imageslim" alt><br>这是 Vue 默认处理的，而且，除了 class 和 style 采用合并策略，其它特性（如上栗 type）会替换掉原来根元素上的属性值。当然，我们也可以显示的在组件内部关闭掉这个特性：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">inheritAttrs: false,</span><br><span class="line">props: [&apos;title&apos;]</span><br></pre></td></tr></table></figure></p>
+<p>利用 inheritAttrs，我们还可以方便的把组件绑定的其它特性，转移到我们指定的元素上。这就需要用到下一个我们要讲的 $attrs 了。</p>
+<h4 id="attrs-listeners"><a href="#attrs-listeners" class="headerlink" title="attrs,listeners"></a>attrs,listeners</h4><p>我们在使用组件库的时候经常会这么写：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;el-input v-model=&quot;input&quot; placeholder=&quot;请输入内容&quot;&gt;&lt;/el-input&gt;</span><br></pre></td></tr></table></figure></p>
+<p>实际渲染后：<br><img src="https://user-gold-cdn.xitu.io/2019/3/23/169aad7bc51ca555?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt><br>可以看到我们指定的的 placeholder 是渲染在 input 上的，但是 input 并不是根元素。难道都用 Props 声明后，再赋值给 input？这种情况就可以用到 $attrs 了，改造一下我们之前那个栗子。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">// communication.vue</span><br><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div class=&quot;communication&quot;&gt;</span><br><span class="line">        &lt;communication-sub v-bind=&quot;dataProps&quot; class=&quot;input&quot; type=&quot;text&quot; placeholder=&quot;请输入内容&quot;&gt;</span><br><span class="line">        &lt;/communication-sub&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">import communicationSub from &apos;./communication-sub.vue&apos;;</span><br><span class="line">export default&#123;</span><br><span class="line">    name: &apos;communication&apos;,</span><br><span class="line">    data() &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            dataProps: &#123;</span><br><span class="line">                title: &apos;我是 communication 的值&apos;,</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    components: &#123;</span><br><span class="line">        communicationSub</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">// communication-sub.vue</span><br><span class="line">···</span><br><span class="line">&lt;div class=&quot;communication-sub&quot;&gt;</span><br><span class="line">    &lt;input v-bind=&quot;$attrs&quot; v-model=&quot;title&quot;&gt;&lt;/input&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">···</span><br><span class="line"> export default &#123;</span><br><span class="line">    inheritAttrs: false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://user-gold-cdn.xitu.io/2019/3/23/169ab45f5907f85a?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt><br>可以看到，type 已经转移到了子元素 input 标签上，但是 class 没有。这是因为 <code>inheritAttrs: false</code>选项不会影响 style 和 class 的绑定。<strong>可以看出 <code>$attrs</code>则是将没有被组件内部 Props 声明的传值（也叫非 Props 特性）收集起来的一个对象，</strong>再通过 v-bind 将其绑定在指定元素上。这也是 Element 等组件库采用的策略。<br><strong>这里需要注意一点，通过 $attrs 指定给元素的属性，不会与该元素原有属性发生合并或替换，而是以原有属性为准。</strong>举个例子，假如我将上述 input 的 type 默认设置为 password。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input v-bind=&quot;$attrs&quot; v-model=&quot;title&quot; type=&quot;password&quot;&gt;&lt;/input&gt;</span><br></pre></td></tr></table></figure></p>
+<p>则不会采用 $attrs 中的 type: ‘text’，将以 password 为准，所以如果需要默认值的属性，建议不要用这种方式。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/04/17/vue组件通信/" data-id="cjukq7u9i0000ugtjr1963tih" class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+    
+      <a href="/2019/04/13/async-await/" class="article-nav-link">
+        <strong class="article-nav-caption">Olde posts</strong>
+        <div class="article-nav-title">async/await</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <!-- <ul class="list-inline">
+      <li>&copy; 2019 Now you can see me</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul> -->
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/cat.svg" alt="Now you can see me"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/search.js"></script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>
