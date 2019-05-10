@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    数据结构 |
+    
+    Now you can see me</title>
+  
+    <link rel="shortcut icon" href="/cat.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+</head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-数据结构" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      数据结构
+    </h1>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/05/09/数据结构/" class="article-date">
+  <time datetime="2019-05-09T11:42:32.000Z" itemprop="datePublished">2019-05-09</time>
+</a>
+        
+        <span class="article-time">读完需要大约
+        2</span>
+        <span>分钟</span>
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h4 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h4><hr>
+<h5 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h5><a id="more"></a>
+<p>栈式一个线性结构，在计算机中是一个相当常见的数据结构。<br>特点是只能在某一端添加或删除数据，遵循先进后出的原则</p>
+<h5 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h5><p>每种数据结构都可以用很多种方式来实现，其实可以把栈看成是数组的一个子集，所以这里使用数组来实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">class Stack &#123;</span><br><span class="line">	constructor() &#123;</span><br><span class="line">		this.stack = []</span><br><span class="line">	&#125;</span><br><span class="line">	push(item) &#123;</span><br><span class="line">		this.stack.push(item)</span><br><span class="line">	&#125;</span><br><span class="line">	pop() &#123;</span><br><span class="line">		this.stack.pop()</span><br><span class="line">	&#125;</span><br><span class="line">	peek() &#123;</span><br><span class="line">		return this.stack[this.getCount() - 1]</span><br><span class="line">	&#125;</span><br><span class="line">	getCount() &#123;</span><br><span class="line">		return this.stack.length</span><br><span class="line">	&#125;</span><br><span class="line">	isEmpty() &#123;</span><br><span class="line">		return this.getCount() === 0</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h5><p>匹配括号<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">var isValid = function(s)&#123;</span><br><span class="line">	let map = &#123;</span><br><span class="line">		&apos;(&apos;: -1,</span><br><span class="line">		&apos;)&apos;: 1,</span><br><span class="line">		&apos;[&apos;: -2,</span><br><span class="line">		&apos;]&apos;: 2,</span><br><span class="line">		&apos;&#123;&apos;: -3,</span><br><span class="line">		&apos;&#125;&apos;: 3</span><br><span class="line">	&#125;</span><br><span class="line">	let stack = []</span><br><span class="line">	for(let i = 0; i &lt; s.length; i++)&#123;</span><br><span class="line">		if(map[s[i]] &lt; 0)&#123;</span><br><span class="line">			stack.push(s[i])</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			let last = stack.pop()</span><br><span class="line">			if(map[last] + map[s[i]] != 0)</span><br><span class="line">			return false</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	if(stack.length &gt; 0)</span><br><span class="line">		return false</span><br><span class="line">	return true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h4><hr>
+<h5 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h5><p>队列一个线性结构，特点是在某一端添加数据，在另一端删除数据，遵循先进先出的原则。</p>
+<h5 id="实现-1"><a href="#实现-1" class="headerlink" title="实现"></a>实现</h5><p>这里会讲解两种实现队列的方法，分别是单链队列和循环队列。</p>
+<h5 id="单链队列"><a href="#单链队列" class="headerlink" title="单链队列"></a>单链队列</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">class Queue &#123;</span><br><span class="line">	constructor() &#123;</span><br><span class="line">		this.queue = []</span><br><span class="line">	&#125;</span><br><span class="line">	enQueue(item) &#123;</span><br><span class="line">		this.queue.push(item)</span><br><span class="line">	&#125;</span><br><span class="line">	deQueue() &#123;</span><br><span class="line">		return this.queue.shift()</span><br><span class="line">	&#125;</span><br><span class="line">	getHeader() &#123;</span><br><span class="line">    	return this.queue[0]</span><br><span class="line">	&#125;</span><br><span class="line">	getLength() &#123;</span><br><span class="line">	    return this.queue.length</span><br><span class="line">	&#125;</span><br><span class="line">	isEmpty() &#123;</span><br><span class="line">	    return this.getLength() === 0</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为单链队列在出队操作的时候需要O(n)的时间复杂度，所以引入了循环队列。循环队列的出队操作平均是O(1)的时间复杂度。</p>
+<h5 id="循环队列"><a href="#循环队列" class="headerlink" title="循环队列"></a>循环队列</h5><p><code>`</code><br>class sqQueue {<br>    constructor(length){<br>        this.queue = new Array(length + 1)<br>        //队头<br>        this.first = 0<br>        //队尾<br>        this.last = 0<br>        //当前队列大小<br>        this.size = 0<br>    }<br>    enQueue(item) {<br>        //判断队尾+1是否为队头<br>        //如果是就代表需要扩容数组<br>        // % this.queue.length是为了防止数组越界<br>        if(this.first === (this.last + 1) % this.queue.length) {<br>            this.resize(this.getLength() *2 + 1)<br>        }<br>        thisqueue[this.last] = item<br>        this.size++<br>        this.last = (this.last + 1) % this.queue.length<br>    }<br>    deQueue() {<br>        if(this.isEmpty()){<br>            throw Error(‘Queue is empty’)<br>        }<br>        let r = this.queue[this.first]<br>        this.queue[this.first] = null<br>        //菜鸡看不懂写不下去辽<br>    }<br>}</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/05/09/数据结构/" data-id="cjvhow0y5000230tjrhr5jz0z" class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+      <a href="/2019/05/09/算法/" class="article-nav-link">
+        <strong class="article-nav-caption">Newer posts</strong>
+        <div class="article-nav-title">
+          
+            算法
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2019/05/09/手写代码/" class="article-nav-link">
+        <strong class="article-nav-caption">Olde posts</strong>
+        <div class="article-nav-title">手写代码</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <!-- <ul class="list-inline">
+      <li>&copy; 2019 Now you can see me</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul> -->
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/cat.svg" alt="Now you can see me"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/search.js"></script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>
