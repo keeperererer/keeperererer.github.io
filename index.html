@@ -60,6 +60,87 @@
 
     
       
+        <article id="post-为什么call比apply快？" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/05/14/为什么call比apply快？/">为什么call比apply快？</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/05/14/为什么call比apply快？/" class="article-date">
+  <time datetime="2019-05-14T03:17:20.000Z" itemprop="datePublished">2019-05-14</time>
+</a>
+        
+        <span class="article-time">读完需要大约
+        2</span>
+        <span>分钟</span>
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <p>在看源码的过程中，总会遇到这样的写法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var triggerEvents = function(events, args) &#123;</span><br><span class="line">    var ev, i = -1, l = events.length, a1 = args[0], a2 = args[1], a3 = args[2];</span><br><span class="line">    switch (args.length) &#123;</span><br><span class="line">      case 0: while (++i &lt; l) (ev = events[i]).callback.call(ev.ctx); return;</span><br><span class="line">      case 1: while (++i &lt; l) (ev = events[i]).callback.call(ev.ctx, a1); return;</span><br><span class="line">      case 2: while (++i &lt; l) (ev = events[i]).callback.call(ev.ctx, a1, a2); return;</span><br><span class="line">      case 3: while (++i &lt; l) (ev = events[i]).callback.call(ev.ctx, a1, a2, a3); return;</span><br><span class="line">      default: while (++i &lt; l) (ev = events[i]).callback.apply(ev.ctx, args); return;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>作者会在参数为3个（包含3）以内时，优先使用 call 方法进行事件的处理。而当参数过多（多余3个）时，才考虑使用 apply 方法。<br>这个就是因为 call 比 apply 快。 </p>
+<h3 id="为什么call比apply快？"><a href="#为什么call比apply快？" class="headerlink" title="为什么call比apply快？"></a>为什么call比apply快？</h3><h4 id="Function-prototype-apply-thisArg-argArray"><a href="#Function-prototype-apply-thisArg-argArray" class="headerlink" title="Function.prototype.apply(thisArg,argArray)"></a>Function.prototype.apply(thisArg,argArray)</h4><ul>
+<li>如果 IsCallable（Function）为false，即 Function 不可以被调用，则抛出一个 TypeError 异常。</li>
+<li>如果 argArray 为 null 或未定义，则返回调用 Function 的 [[Call]] 内部方法的结果，提供thisArg 和一个空数组作为参数。</li>
+<li>如果 Type（argArray）不是 Object，则抛出 TypeError 异常。</li>
+<li>获取 argArray 的长度。调用 argArray 的 [[Get]] 内部方法，找到属性 length。 赋值给 len。</li>
+<li>定义 n 为 ToUint32（len）。</li>
+<li>初始化 argList 为一个空列表。</li>
+<li>初始化 index 为 0。</li>
+<li>循环迭代取出 argArray。重复循环 while（index &lt; n）</li>
+</ul>
+<ul>
+<li>将下标转换成String类型。初始化 indexName 为 ToString(index).</li>
+<li>定义 nextArg 为 使用 indexName 作为参数调用argArray的[[Get]]内部方法的结果。</li>
+<li>将 nextArg 添加到 argList 中，作为最后一个元素。</li>
+<li>设置 index ＝ index＋1</li>
+</ul>
+<p><strong>返回调用 Function 的 [[Call]] 内部方法的结果，提供 thisArg 作为该值，argList 作为参数列表。</strong></p>
+<h4 id="Function-prototype-call-thisArg-arg1-arg2-…"><a href="#Function-prototype-call-thisArg-arg1-arg2-…" class="headerlink" title="Function.prototype.call(thisArg[,arg1[,arg2,…]])"></a>Function.prototype.call(thisArg[,arg1[,arg2,…]])</h4><ul>
+<li>如果 IsCallable（Function）为 false，即 Function 不可以被调用，则抛出一个 TypeError 异常。</li>
+<li>定义 argList 为一个空列表。<br>如果使用超过一个参数调用此方法，则以从arg1开始的从左到右的顺序将每个参数附加为 argList 的最后一个元素</li>
+<li>返回调用func的[[Call]]内部方法的结果，提供 thisArg 作为该值，argList 作为参数列表。</li>
+</ul>
+<p>我们可以看到，明显 apply 比 call 的步骤多很多。<br>由于 apply 中定义的参数格式（数组），使得被调用之后需要做更多的事，需要将给定的参数格式改变（步骤8）。 同时也有一些对参数的检查（步骤2），在 call 中却是不必要的。<br>另外一个很重要的点：在 apply 中不管有多少个参数，都会执行循环，也就是步骤 6-8，在 call 中也就是对应步骤3 ，是有需要才会被执行。</p>
+<p>综上，<strong>call 方法比 apply 快的原因是 call 方法的参数格式正是内部方法所需要的格式。</strong></p>
+<blockquote>
+<p>转自:<a href="https://www.cnblogs.com/wuguanglin/p/whyCallFastThanApply.html" target="_blank" rel="noopener">为什么call比apply快？</a></p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/05/14/为什么call比apply快？/" data-id="cjvnaoe9e0002s8tjwipc77yd" class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+
+
+
+      
         <article id="post-算法" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -101,7 +182,7 @@
       
     </p></div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/09/算法/" data-id="cjvi2x9hm0006lwtjnl82qcaf" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/05/09/算法/" data-id="cjvnaoebo0008s8tjd64aprco" class="article-share-link">分享</a>
       
     </footer>
 
@@ -157,7 +238,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/09/数据结构/" data-id="cjvi2x9gu0002lwtj6rebv95x" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/05/09/数据结构/" data-id="cjvnaoeaw0005s8tjbv3w8n4u" class="article-share-link">分享</a>
       
     </footer>
 
@@ -212,7 +293,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/09/手写代码/" data-id="cjvi2x9hh0004lwtj14xqncfj" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/05/09/手写代码/" data-id="cjvnaoeat0004s8tjxme1mu8j" class="article-share-link">分享</a>
       
     </footer>
 
@@ -265,7 +346,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/24/vue响应式/" data-id="cjvi2x9fc0000lwtjrhlekmc3" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/04/24/vue响应式/" data-id="cjvnaoe920000s8tjny44a76t" class="article-share-link">分享</a>
       
     </footer>
 
@@ -327,7 +408,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/17/vue组件通信/" data-id="cjvi2x9js0007lwtjt7wh9jm5" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/04/17/vue组件通信/" data-id="cjvnaoebh0007s8tjv6zjklqf" class="article-share-link">分享</a>
       
     </footer>
 
@@ -382,7 +463,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/13/async-await/" data-id="cjvi2x9hj0005lwtjindhhfcc" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/04/13/async-await/" data-id="cjvnaoeb40006s8tjs5ngknsx" class="article-share-link">分享</a>
       
     </footer>
 
