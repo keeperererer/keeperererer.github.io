@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[TODOLists]]></title>
+    <url>%2F2019%2F05%2F21%2FTODOLists%2F</url>
+    <content type="text"></content>
+  </entry>
+  <entry>
+    <title><![CDATA[实习日志]]></title>
+    <url>%2F2019%2F05%2F21%2F%E5%AE%9E%E4%B9%A0%E6%97%A5%E5%BF%97%2F</url>
+    <content type="text"></content>
+  </entry>
+  <entry>
+    <title><![CDATA[项目剖析]]></title>
+    <url>%2F2019%2F05%2F15%2F%E9%A1%B9%E7%9B%AE%E5%89%96%E6%9E%90%2F</url>
+    <content type="text"><![CDATA[移动端音乐app移动端适配1&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0,maxinum-scale=1.0,minimum-scale=1.0,user-scalable=no&quot;&gt; content属性值 : width:可视区域的宽度，值可为数字或关键词device-width height:同width intial-scale:页面首次被显示是可视区域的缩放级别，取值1.0则页面按实际尺寸显示，无任何缩放 maximum-scale=1.0, minimum-scale=1.0;可视区域的缩放级别， maximum-scale用户可将页面放大的程序，1.0将禁止用户放大到实际尺寸之上。 页面进行缩放，no 禁止缩放 fastclick 移动端点击延迟事件移动端浏览器在派发点击事件的时候，通常会出现300ms左右的延迟原因：移动端的双击会缩放导致click判断延迟 解决方式： 禁止缩放1&lt;meta name=&quot;viewport&quot; content=&quot;user-scalable=no&quot; 缺点：网页无法缩放-更改默认视口宽度1&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot;&gt; 缺点：需要浏览器的支持 css touch-actiontouch-action的默认为auto，将其置为none即可移除目标元素的300ms延迟缺点：新属性，可能存在浏览器兼容问题 tap事件zepto的tap事件，利用touchstart和touchend来模拟click事件缺点：点击穿透 fastclick原理：在检测到touched事件的时候，会通过DOM自定义事件立即发出模拟一个click事件，并把浏览器在300ms之后真正的click事件阻止掉缺点：脚本相对较大 在vue中使用fastclick：123456//安装npm install fastclick -s//引入import FastClick from &apos;fastclick&apos;//使用FastClick.attach(document.body) 手写JSONPjsonp原理：动态生成一个js标签，其src由接口url，请求参数，callback函数名拼接而成，利用js标签没有跨域限制的特性实现跨域请求。 有几点需要注意： callback函数要绑定在window对象上 服务端返回数据有特定格式要求：callback函数名+’(‘+JSON.stringufy(返回数据)+’)’ 不支持post，因为js标签本身就是一个get请求 具体代码：123456789101112131415161718192021222324252627282930313233343536const jsonp = function(url,data)&#123; return new Promise((resolve,reject) =&gt;&#123; let dataString = url.indexOf(&apos;?&apos;) === -1 ? &apos;?&apos; : &apos;&amp;&apos;; let callbackName = `jsonpCB_$&#123;Date.now()&#125;`; url += `$&#123;dataString&#125;callback=$&#123;callbackName&#125;` if(data)&#123; //有请求参数，依次添加到url for(let k in data)&#123; url += `&amp;$&#123;k&#125;=$&#123;data[k]&#125;` &#125; &#125; let jsNode = document.createElement(&apos;script&apos;); jsNode.src = url; //触发callback，触发后删除js标签和绑定在window上的callback window[callbackName] = result =&gt; &#123; delete window[callbackName] document.body.removeChild(jsNode) if(result)&#123; resolve(result) &#125;else&#123; reject(&apos;没有返回数据&apos;) &#125; &#125; //js加载异常的情况 jsNode.addEventListener(&apos;error&apos;,()=&gt;&#123; delete window[callbackName] document.body.removeChild(jsNode) reject(&apos;js资源加载失败&apos;) &#125;,false) //添加js节点到document上时，开始请求 document.body.appendChild(jsNode) &#125;)&#125;jsonp(&apos;http://192.168.0.103:8081/jsonp&apos;, &#123;a: 1, b: &apos;heiheihei&apos;&#125;) .then(result =&gt; &#123; console.log(result) &#125;) .catch(err =&gt; &#123; console.error(err) &#125;) 轮播图组件开发利用了better-scroll库初始化better-scroll不能滚动或者报错的问题 可能是组件渲染的时间不对 可能是高度宽度计算不对 应该在mounted钩子里渲染函数]]></content>
+  </entry>
+  <entry>
     <title><![CDATA[剖析Vue原理--实现双向绑定MVVM]]></title>
     <url>%2F2019%2F05%2F15%2F%E5%89%96%E6%9E%90Vue%E5%8E%9F%E7%90%86-%E5%AE%9E%E7%8E%B0%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9AMVVM%2F</url>
     <content type="text"><![CDATA[]]></content>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    项目剖析 |
+    
+    Now you can see me</title>
+  
+    <link rel="shortcut icon" href="/cat.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+</head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-项目剖析" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      项目剖析
+    </h1>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/05/15/项目剖析/" class="article-date">
+  <time datetime="2019-05-15T10:26:00.000Z" itemprop="datePublished">2019-05-15</time>
+</a>
+        
+        <span class="article-time">读完需要大约
+        3</span>
+        <span>分钟</span>
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h3 id="移动端音乐app"><a href="#移动端音乐app" class="headerlink" title="移动端音乐app"></a>移动端音乐app</h3><h4 id="移动端适配"><a href="#移动端适配" class="headerlink" title="移动端适配"></a>移动端适配</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0,maxinum-scale=1.0,minimum-scale=1.0,user-scalable=no&quot;&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="content属性值"><a href="#content属性值" class="headerlink" title="content属性值 :"></a>content属性值 :</h5><ul>
+<li>width:可视区域的宽度，值可为数字或关键词device-width</li>
+<li>height:同width</li>
+<li>intial-scale:页面首次被显示是可视区域的缩放级别，取值1.0则页面按实际尺寸显示，无任何缩放</li>
+<li>maximum-scale=1.0, minimum-scale=1.0;可视区域的缩放级别，</li>
+<li>maximum-scale用户可将页面放大的程序，1.0将禁止用户放大到实际尺寸之上。</li>
+<li>页面进行缩放，no 禁止缩放</li>
+</ul>
+<h5 id="fastclick"><a href="#fastclick" class="headerlink" title="fastclick"></a>fastclick</h5><hr>
+<p><strong>移动端点击延迟事件</strong><br>移动端浏览器在派发点击事件的时候，通常会出现300ms左右的延迟<br>原因：移动端的双击会缩放导致click判断延迟</p>
+<p>解决方式：</p>
+<ul>
+<li>禁止缩放<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;user-scalable=no&quot;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>缺点：网页无法缩放<br>-更改默认视口宽度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot;&gt;</span><br></pre></td></tr></table></figure></p>
+<p>缺点：需要浏览器的支持</p>
+<ul>
+<li>css touch-action<br>touch-action的默认为auto，将其置为none即可移除目标元素的300ms延迟<br>缺点：新属性，可能存在浏览器兼容问题</li>
+<li>tap事件<br>zepto的tap事件，利用touchstart和touchend来模拟click事件<br>缺点：点击穿透</li>
+<li>fastclick<br>原理：在检测到touched事件的时候，会通过DOM自定义事件立即发出模拟一个click事件，并把浏览器在300ms之后真正的click事件阻止掉<br>缺点：脚本相对较大</li>
+</ul>
+<p>在vue中使用fastclick：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//安装</span><br><span class="line">npm install fastclick -s</span><br><span class="line">//引入</span><br><span class="line">import FastClick from &apos;fastclick&apos;</span><br><span class="line">//使用</span><br><span class="line">FastClick.attach(document.body)</span><br></pre></td></tr></table></figure></p>
+<h4 id="手写JSONP"><a href="#手写JSONP" class="headerlink" title="手写JSONP"></a>手写JSONP</h4><p>jsonp原理：动态生成一个js标签，其src由接口url，请求参数，callback函数名拼接而成，利用js标签没有跨域限制的特性实现跨域请求。</p>
+<p>有几点需要注意：</p>
+<ul>
+<li>callback函数要绑定在window对象上</li>
+<li>服务端返回数据有特定格式要求：callback函数名+’(‘+JSON.stringufy(返回数据)+’)’</li>
+<li>不支持post，因为js标签本身就是一个get请求</li>
+</ul>
+<p>具体代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">const jsonp = function(url,data)&#123;</span><br><span class="line">	return new Promise((resolve,reject) =&gt;&#123;</span><br><span class="line">		let dataString = url.indexOf(&apos;?&apos;) === -1 ? &apos;?&apos; : &apos;&amp;&apos;;</span><br><span class="line">		let callbackName = `jsonpCB_$&#123;Date.now()&#125;`;</span><br><span class="line">		url += `$&#123;dataString&#125;callback=$&#123;callbackName&#125;`</span><br><span class="line">		if(data)&#123;</span><br><span class="line">			//有请求参数，依次添加到url</span><br><span class="line">			for(let k in data)&#123;</span><br><span class="line">				url += `&amp;$&#123;k&#125;=$&#123;data[k]&#125;`</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		let jsNode = document.createElement(&apos;script&apos;);</span><br><span class="line">		jsNode.src = url;</span><br><span class="line">		//触发callback，触发后删除js标签和绑定在window上的callback</span><br><span class="line">		window[callbackName] = result =&gt; &#123;</span><br><span class="line">			delete window[callbackName]</span><br><span class="line">			document.body.removeChild(jsNode)</span><br><span class="line">			if(result)&#123;</span><br><span class="line">				resolve(result)</span><br><span class="line">			&#125;else&#123;</span><br><span class="line">				reject(&apos;没有返回数据&apos;)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		//js加载异常的情况</span><br><span class="line">		jsNode.addEventListener(&apos;error&apos;,()=&gt;&#123;</span><br><span class="line">			delete window[callbackName]</span><br><span class="line">			document.body.removeChild(jsNode)</span><br><span class="line">			reject(&apos;js资源加载失败&apos;)</span><br><span class="line">			&#125;,false)</span><br><span class="line">			//添加js节点到document上时，开始请求</span><br><span class="line">			document.body.appendChild(jsNode)</span><br><span class="line">		&#125;)</span><br><span class="line">&#125;</span><br><span class="line">jsonp(&apos;http://192.168.0.103:8081/jsonp&apos;, &#123;a: 1, b: &apos;heiheihei&apos;&#125;)</span><br><span class="line">      .then(result =&gt; &#123; console.log(result) &#125;)</span><br><span class="line">      .catch(err =&gt; &#123; console.error(err) &#125;)</span><br></pre></td></tr></table></figure></p>
+<h4 id="轮播图组件开发"><a href="#轮播图组件开发" class="headerlink" title="轮播图组件开发"></a>轮播图组件开发</h4><p>利用了better-scroll库<br><strong>初始化better-scroll不能滚动或者报错的问题</strong></p>
+<ul>
+<li>可能是组件渲染的时间不对 可能是高度宽度计算不对</li>
+<li>应该在mounted钩子里渲染函数</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/05/15/项目剖析/" data-id="cjvxpgol9000aektjp9p0dxqp" class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+      <a href="/2019/05/21/实习日志/" class="article-nav-link">
+        <strong class="article-nav-caption">Newer posts</strong>
+        <div class="article-nav-title">
+          
+            实习日志
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2019/05/15/剖析Vue原理-实现双向绑定MVVM/" class="article-nav-link">
+        <strong class="article-nav-caption">Olde posts</strong>
+        <div class="article-nav-title">剖析Vue原理--实现双向绑定MVVM</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <!-- <ul class="list-inline">
+      <li>&copy; 2019 Now you can see me</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul> -->
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/cat.svg" alt="Now you can see me"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/search.js"></script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>
