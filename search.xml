@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[学习axios]]></title>
+    <url>%2F2019%2F05%2F23%2F%E5%AD%A6%E4%B9%A0axios%2F</url>
+    <content type="text"><![CDATA[axios简介axios是一个基于Promise用于浏览器和nodejs的HTTP客户端，它本身具有以下特征： 从浏览器中创建XMLHttpRequest 从nodejs发出http请求 支持Promise API 拦截请求和响应 转换请求和响应数据 取消请求 自动转化JSON数据 客户端支持防止CSRF/XSRF 浏览器兼容性 axios例子执行GET请求1234567891011121314151617181920//向具有指定ID的用户发出请求axios.get(&apos;/user?ID=12345&apos;) .then(function(response)&#123; console.log(response);&#125;).catch(function(error)&#123; console.log(error);&#125;);//也可以通过params对象传递参数axios.get(&apos;/user&apos;,&#123; params:&#123; ID:12345 &#125;&#125;).then(function(response)&#123; console.log(reponse);&#125;).catch(function(error)&#123; console.log(error)&#125;) 执行POST请求12345678910axios.post(&apos;/user&apos;,&#123; firstName:&apos;Fred&apos;, lastName:&apos;Flintstone&apos;&#125;).then(function(response)&#123; console.log(response)&#125;).catch(function(error)&#123; console.log(error)&#125;) 执行多个并发请求12345678910function getUserAccount()&#123; return axios.get(&apos;/user/12345&apos;);&#125;function getUserPermissions()&#123; return axios.get(&apos;/user/12345/permissions&apos;);&#125;axios.all([getUserAccount(),getUserPermissions()]).then(axios.spread(function(acct,perms)&#123;//两个请求现已完成&#125;)) axios API可以通过将相关配置传递给axios来进行请求。 axios(config)123456789//发送一个POST请求axios(&#123; method:&apos;post&apos;, url:&apos;/user/12345&apos;, data:&#123; firstName:&apos;Fred&apos;, lastName:&apos;Flintstone&apos; &#125;&#125;); axios(url[,config])12//发送一个GEt请求（GET请求时默认请求模式）axios(&apos;/user/12345&apos;) 请求方法别名为了方便起见，已经为所有支持的请求方法提供了别名 axios.request(config) axios.get(url[,config]) axios.delete(url[,config]) axios.head(url[,/config]) axios.options(url[, config]) axios.post(url[, data[, config]]) axios.put(url[, data[, config]]) axios.patch(url[, data[, config]])]]></content>
+      <tags>
+        <tag>axios</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[TODOLists]]></title>
     <url>%2F2019%2F05%2F21%2FTODOLists%2F</url>
     <content type="text"></content>
