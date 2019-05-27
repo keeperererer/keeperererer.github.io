@@ -44,9 +44,9 @@
   <time datetime="2019-05-15T10:26:00.000Z" itemprop="datePublished">2019-05-15</time>
 </a>
         
-        <span class="article-time">读完需要大约
-        4</span>
-        <span>分钟</span>
+        <!-- <span class="article-time">读完需要大约 -->
+        <!-- 5</span> -->
+        <!-- <span>分钟</span> -->
       </div>
     
 
@@ -118,7 +118,13 @@
 <li>如果在切换路由时，会将页面的内容重新渲染，这是没有必要的,可以用keep-alive将router-view包裹起来，将其缓存到内存中。</li>
 <li>在destroyed这个生命钩子函数中可以手动清理定时器。</li>
 </ul>
-
+<hr>
+<p>如果页面布局如下图所示：<br><img src="https://i.loli.net/2019/05/27/5cebe236616c724251.png" alt></p>
+<blockquote>
+<p>(Better-scroll的坑)如果加载时图片加载出来晚于下面的滚动列表，列表位置会一开始出现在最顶上，等图片加载出来了才能被挤到预期位置，但是会滚不到列表的底部，但是图片的高度在不同设备下是不一样的，所以图片高度未知。</p>
+</blockquote>
+<p>可以在图片img上绑定一个@load事件，在load上定义一个loadImage方法，在这个方法里面调用图片的refresh()函数重新计算图片高度，即可。</p>
+<h4 id="懒加载"><a href="#懒加载" class="headerlink" title="懒加载"></a>懒加载</h4>
       
     </div>
     <footer class="article-footer">
@@ -135,7 +141,7 @@
   <nav class="article-nav">
     
       <a href="/2019/05/21/实习日志/" class="article-nav-link">
-        <strong class="article-nav-caption">Newer posts</strong>
+        <strong class="article-nav-caption">上篇</strong>
         <div class="article-nav-title">
           
             实习日志
@@ -145,7 +151,7 @@
     
     
       <a href="/2019/05/15/剖析Vue原理-实现双向绑定MVVM/" class="article-nav-link">
-        <strong class="article-nav-caption">Olde posts</strong>
+        <strong class="article-nav-caption">下篇</strong>
         <div class="article-nav-title">剖析Vue原理--实现双向绑定MVVM</div>
       </a>
     
