@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[前端数据操作总结]]></title>
+    <url>%2F2019%2F05%2F29%2F%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C%E6%80%BB%E7%BB%93%2F</url>
+    <content type="text"><![CDATA[src转img 123456789101112function srctoimg(src)&#123; return new Promise((reslove,reject) =&gt; &#123; let img = new Image() img.onload = function()&#123; resolve(img) &#125; img.onerror = function(err)&#123; reject(err) &#125; img.src = src &#125;)&#125; img转canvas12345678function imgtocanvas(img)&#123; let canvas = document.createElement(&quot;canvas&quot;) let ctx = canvas.getContext(&apos;2d&apos;) canvas.width = img.width canvas.height = img.height ctx.drawImage(img,0,0,canvas.width,canvas.height) return canvas&#125; ImageData转canvas12345678function ImageDatetocanvas(imgData)&#123; let canvas = document.createElement(&quot;canvas&quot;) let ctx = canvas.getContext(&apos;2d&apos;) canvas.width = imgData.width canvas.height = imgData.height ctx.putImageData(imgData,canvas.width,canvas.height) return canvas&#125; canvas转ImageData1234function canvastoImageDate(canvas)&#123; let ctx = canvas.getContext(&apos;2d&apos;) return ctx.createImageData(canvas.width,canvas.height)&#125; canvas像素操作123456789function canvaspixel(canvas,deal)&#123; let ctx = canvas.getContext(&apos;2d&apos;) var imgData = ctx.createImageData(canvas.width,canvas.height) for(var i = 0; i &lt; imgData.data.length; i += 4)&#123; deal(r,g,b,a) &#125; ctx.putImageData(imgData,canvas.width,canvas.height) return canvas&#125; canvas转DataURL(base64)1canvas.toDataURL() DataURL(base64)转blob(，二进制大对象，是一个可以存储二进制文件的“容器”。 在计算机中，BLOB常常是数据库中用来存储二进制文件的字段类型。) file转arrayBuffer123456789function filetoblob(file)&#123; return new Promise((resolve,reject) =&gt; &#123; var reader = new FileReader(); reader.readAsArrayBuffer(file); reader.onload = function(e)&#123; resolve(reader.result) &#125; &#125;)&#125; file转blob(二进制大对象，是一个可以存储二进制文件的“容器”。 在计算机中，BLOB常常是数据库中用来存储二进制文件的字段类型。) 转载于]]></content>
+  </entry>
+  <entry>
     <title><![CDATA[一些常用流程]]></title>
     <url>%2F2019%2F05%2F28%2F%E4%B8%80%E4%BA%9B%E5%B8%B8%E7%94%A8%E6%B5%81%E7%A8%8B%2F</url>
-    <content type="text"><![CDATA[创建vue-cli项目 npm install vue-cli -g npm init webpack projectName 把本地项目与github相连 在github新建一个仓库,复制git链接 在本地 git clone 链接 cd 到项目位置 git init git commit -m ‘…’ git remote add origin git@github(git地址) git pull origin master git push origin master]]></content>
+    <content type="text"><![CDATA[创建vue-cli项目 npm install vue-cli -g vue init webpack projectName 把本地项目与github相连 在github新建一个仓库,复制git链接 在本地 git clone 链接 cd 到项目位置 git init git commit -m ‘…’ git remote add origin git@github(git地址) git pull origin master git push origin master]]></content>
   </entry>
   <entry>
     <title><![CDATA[译axios文档]]></title>

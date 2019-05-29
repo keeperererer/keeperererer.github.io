@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    前端数据操作总结 |
+    
+    Now you can see me</title>
+  
+    <link rel="shortcut icon" href="/cat.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+</head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-前端数据操作总结" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      前端数据操作总结
+    </h1>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/05/29/前端数据操作总结/" class="article-date">
+  <time datetime="2019-05-29T08:25:03.000Z" itemprop="datePublished">2019-05-29</time>
+</a>
+        
+        <!-- <span class="article-time">读完需要大约 -->
+        <!-- 1</span> -->
+        <!-- <span>分钟</span> -->
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h3 id="src转img"><a href="#src转img" class="headerlink" title="src转img"></a>src转img</h3><a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">function srctoimg(src)&#123;</span><br><span class="line">	return new Promise((reslove,reject) =&gt; &#123;</span><br><span class="line">		let img = new Image()</span><br><span class="line">		img.onload = function()&#123;</span><br><span class="line">			resolve(img)</span><br><span class="line">		&#125;</span><br><span class="line">		img.onerror = function(err)&#123;</span><br><span class="line">			reject(err)</span><br><span class="line">		&#125;</span><br><span class="line">		img.src = src</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="img转canvas"><a href="#img转canvas" class="headerlink" title="img转canvas"></a>img转canvas</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">function imgtocanvas(img)&#123;</span><br><span class="line">	let canvas = document.createElement(&quot;canvas&quot;)</span><br><span class="line">	let ctx = canvas.getContext(&apos;2d&apos;)</span><br><span class="line">	canvas.width = img.width</span><br><span class="line">	canvas.height = img.height</span><br><span class="line">	ctx.drawImage(img,0,0,canvas.width,canvas.height)</span><br><span class="line">	return canvas</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="ImageData转canvas"><a href="#ImageData转canvas" class="headerlink" title="ImageData转canvas"></a>ImageData转canvas</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">function ImageDatetocanvas(imgData)&#123;</span><br><span class="line">	let canvas = document.createElement(&quot;canvas&quot;)</span><br><span class="line">	let ctx = canvas.getContext(&apos;2d&apos;)</span><br><span class="line">	canvas.width = imgData.width</span><br><span class="line">	canvas.height = imgData.height</span><br><span class="line">	ctx.putImageData(imgData,canvas.width,canvas.height)</span><br><span class="line">	return canvas</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="canvas转ImageData"><a href="#canvas转ImageData" class="headerlink" title="canvas转ImageData"></a>canvas转ImageData</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function canvastoImageDate(canvas)&#123;</span><br><span class="line">	let ctx = canvas.getContext(&apos;2d&apos;)</span><br><span class="line">	return ctx.createImageData(canvas.width,canvas.height)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="canvas像素操作"><a href="#canvas像素操作" class="headerlink" title="canvas像素操作"></a>canvas像素操作</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function canvaspixel(canvas,deal)&#123;</span><br><span class="line">	let ctx = canvas.getContext(&apos;2d&apos;)</span><br><span class="line">	var imgData = ctx.createImageData(canvas.width,canvas.height)</span><br><span class="line">	for(var i = 0; i &lt; imgData.data.length; i += 4)&#123;</span><br><span class="line">		deal(r,g,b,a)</span><br><span class="line">	&#125;</span><br><span class="line">	ctx.putImageData(imgData,canvas.width,canvas.height)</span><br><span class="line">	return canvas</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="canvas转DataURL-base64"><a href="#canvas转DataURL-base64" class="headerlink" title="canvas转DataURL(base64)"></a>canvas转DataURL(base64)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">canvas.toDataURL()</span><br></pre></td></tr></table></figure>
+<h3 id="DataURL-base64-转blob-，二进制大对象，是一个可以存储二进制文件的“容器”。-在计算机中，BLOB常常是数据库中用来存储二进制文件的字段类型。"><a href="#DataURL-base64-转blob-，二进制大对象，是一个可以存储二进制文件的“容器”。-在计算机中，BLOB常常是数据库中用来存储二进制文件的字段类型。" class="headerlink" title="DataURL(base64)转blob(，二进制大对象，是一个可以存储二进制文件的“容器”。 在计算机中，BLOB常常是数据库中用来存储二进制文件的字段类型。)"></a>DataURL(base64)转blob(，二进制大对象，是一个可以存储二进制文件的“容器”。 在计算机中，BLOB常常是数据库中用来存储二进制文件的字段类型。)</h3><p><img src="https://i.loli.net/2019/05/29/5cee4c66451d739948.png" alt></p>
+<h3 id="file转arrayBuffer"><a href="#file转arrayBuffer" class="headerlink" title="file转arrayBuffer"></a>file转arrayBuffer</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function filetoblob(file)&#123;</span><br><span class="line">	return new Promise((resolve,reject) =&gt; &#123;</span><br><span class="line">		var reader = new FileReader();</span><br><span class="line">		reader.readAsArrayBuffer(file);</span><br><span class="line">		reader.onload = function(e)&#123;</span><br><span class="line">			resolve(reader.result)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="file转blob-二进制大对象，是一个可以存储二进制文件的“容器”。-在计算机中，BLOB常常是数据库中用来存储二进制文件的字段类型。"><a href="#file转blob-二进制大对象，是一个可以存储二进制文件的“容器”。-在计算机中，BLOB常常是数据库中用来存储二进制文件的字段类型。" class="headerlink" title="file转blob(二进制大对象，是一个可以存储二进制文件的“容器”。 在计算机中，BLOB常常是数据库中用来存储二进制文件的字段类型。)"></a>file转blob(二进制大对象，是一个可以存储二进制文件的“容器”。 在计算机中，BLOB常常是数据库中用来存储二进制文件的字段类型。)</h3><blockquote>
+<p><a href="https://juejin.im/post/5c00e8a66fb9a049db72dbd0#comment" target="_blank" rel="noopener">转载于</a></p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/05/29/前端数据操作总结/" data-id="cjw90kzu90007pktj97fh7h78" class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+    
+      <a href="/2019/05/28/一些常用流程/" class="article-nav-link">
+        <strong class="article-nav-caption">下篇</strong>
+        <div class="article-nav-title">一些常用流程</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <!-- <ul class="list-inline">
+      <li>&copy; 2019 Now you can see me</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul> -->
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/cat.svg" alt="Now you can see me"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/search.js"></script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>
