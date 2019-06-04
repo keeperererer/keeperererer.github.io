@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    CORS 简单请求+预检请求 |
+    
+    Now you can see me</title>
+  
+    <link rel="shortcut icon" href="/cat.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+</head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-CORS" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CORS 简单请求+预检请求
+    </h1>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/06/04/CORS/" class="article-date">
+  <time datetime="2019-06-04T05:14:24.000Z" itemprop="datePublished">2019-06-04</time>
+</a>
+        
+        <!-- <span class="article-time">读完需要大约 -->
+        <!-- 3</span> -->
+        <!-- <span>分钟</span> -->
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><a id="more"></a>
+<p>当一个资源从与该资源本身所在的服务器不同的<strong>域，协议，端口</strong>请求一个资源时，资源会发起一个跨域HTTP请求。</p>
+<p>出于安全原因，浏览器限制从脚本内发起的跨源HTTP请求，XMLHttpRequest和Fetch API，只能从加载应用程序的同一个域请求HTTP资源，除非使用CORS头文件</p>
+<p>对于<strong>浏览器限制</strong>这个词，要着重解释一下：不一定是浏览器限制了发起跨站请求，也可能是跨站请求可以正常发起，但是返回结果被浏览器拦截了</p>
+<h3 id="CORS概述"><a href="#CORS概述" class="headerlink" title="CORS概述"></a>CORS概述</h3><p>跨域资源共享标准新增了一组HTTP首部字段，允许服务器声明哪些源站通过浏览器有权限访问哪些资源。</p>
+<p>另外，规范要求，对那些可能对服务器数据产生副作用的HTTP请求方法（特别是GET以外的HTTP请求，或者搭配某些MIME类型的POST请求），<strong>浏览器必须首先使用OPTIONS方法发起一个预检请求(preflight request),从而获知服务端是否允许该跨域请求</strong></p>
+<p><strong>服务器确认允许之后，才发起实际的HTTP请求。</strong>在预检请求的返回中，服务器端也可以通知客户端，是否需要携带身份凭证（包括Cookies和HTTP认证相关数据）。</p>
+<p><img src="https://user-images.githubusercontent.com/25027560/50205846-accac300-03a4-11e9-8654-2d646d237820.png" alt></p>
+<h3 id="简单请求"><a href="#简单请求" class="headerlink" title="简单请求"></a>简单请求</h3><p>不会触发CORS预检的请求成为简单请求，满足以下<strong>所有条件</strong>的才会被视为简单请求，基本上我们日常开发指挥关注前面两点</p>
+<ul>
+<li>使用<code>GET,POST,HEAD</code>其中一种方法</li>
+<li>只使用了如下的安全首部字段，不得人为设置其他首部字段<ul>
+<li>Accept</li>
+<li>Accept-Language</li>
+<li>Content-Type仅限以下三种<ul>
+<li>text/plain</li>
+<li>multipart/form-data</li>
+<li>application/x-www-form-urlencoded</li>
+</ul>
+</li>
+<li>HTML头部header field字段：<code>DPR,Download,Save-Data,Viewport-Width,Width</code></li>
+</ul>
+</li>
+<li>请求中的任意XMLHttpRequestUpload对象均没有注册任何事件监听器；XMLHttpRequestUpload对象可以使用XMLHttpRequest.upload属性访问</li>
+<li>请求中没有使用ReadableStream对象</li>
+</ul>
+<h3 id="预检请求"><a href="#预检请求" class="headerlink" title="预检请求"></a>预检请求</h3><p>需预检的请求要求必须首先使用<code>OPTIONS</code>方法发起一个预检请求到服务器，以获知服务器是否允许该实际请求。“预检请求”的使用，可以避免跨域请求对服务器的用户数据产生未预期的影响</p>
+<p>下面的请求会触发预检请求，其实非简单请求之外的就会触发预检，就不用记那么多了</p>
+<ul>
+<li>使用了PUT、DELETE、CONNECT、OPTIONS、TRACE、PATCH方法</li>
+<li>人为设置了非规定内的其他首部字段，参考上面简单请求的安全字段集合，还要特别注意Content-Type的类型</li>
+<li>XMLHttpRequestUpload 对象注册了任何事件监听器</li>
+<li>请求中使用了ReadableStream对象</li>
+</ul>
+<p>一下是一个发起预检请求的例子<br>发起请求的<code>origin</code>与请求的服务器的<code>host</code>不同，而且根据上面的条件判断，触发了预检</p>
+<p><img src="https://i.loli.net/2019/06/04/5cf60fc6e35f485185.png" alt><br><img src="https://user-images.githubusercontent.com/25027560/50205868-ba804880-03a4-11e9-95d9-d5f4df2816b0.png" alt></p>
+<h3 id="请求附带身份凭证-gt-cookie"><a href="#请求附带身份凭证-gt-cookie" class="headerlink" title="请求附带身份凭证 -&gt; cookie"></a>请求附带身份凭证 -&gt; cookie</h3><p>如果发起请求时设置<code>withCredentials</code>标志设置为<code>true</code>,从而向服务器发送cookie,丹斯如果服务器端的响应中未携带<code>Access-Control-Allow-Credentials:true</code>,浏览器将不会把响应内容返回给请求的发送者</p>
+<p>对于附带身份凭证的请求，服务器不能设置<code>Access-Control-Allow-Origin</code>的值为<code>*</code>,必须是某个具体的域名</p>
+<p>注意，简单GET请求不会被预检，如果对此类带有身份凭证请求的响应中不包含该字段，这个响应将被忽略掉，并且浏览器也不会将相应内容返回给网页</p>
+<h3 id="完整请求流程"><a href="#完整请求流程" class="headerlink" title="完整请求流程"></a>完整请求流程</h3><p><img src="https://user-images.githubusercontent.com/25027560/50205881-c409b080-03a4-11e9-8a57-a2a6d0e1d879.png" alt></p>
+<blockquote>
+<p>转载于：<br><a href="https://github.com/amandakelake/blog/issues/62" target="_blank" rel="noopener">CORS 简单请求+预检请求（彻底理解跨域）</a></p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/06/04/CORS/" data-id="cjwhd507t0000u8tjeern4k1c" class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+    
+      <a href="/2019/06/03/Cookie-Session-Token/" class="article-nav-link">
+        <strong class="article-nav-caption">下篇</strong>
+        <div class="article-nav-title">Cookie,Session,Token</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <!-- <ul class="list-inline">
+      <li>&copy; 2019 Now you can see me</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul> -->
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/cat.svg" alt="Now you can see me"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/search.js"></script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>
