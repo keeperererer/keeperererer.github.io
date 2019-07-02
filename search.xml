@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[输出以下代码运行结果]]></title>
+    <url>%2F2019%2F07%2F02%2F%E8%BE%93%E5%87%BA%E4%BB%A5%E4%B8%8B%E4%BB%A3%E7%A0%81%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C%2F</url>
+    <content type="text"><![CDATA[//example11234var a = &#123;&#125;,b = &apos;123&apos;,c = 123;a[b] = &apos;b&apos;;a[c] = &apos;c&apos;;console.log(a[b]); //example21234var a = &#123;&#125;,b = Symbol(&apos;123&apos;),c = Symbol(&apos;123&apos;);a[b] = &apos;b&apos;;a[c] = &apos;c&apos;;console.log(a[b]); //example31234var a = &#123;&#125;,b = &#123;key : &apos;123&apos;&#125;,c = &#123;key : &apos;456&apos;&#125;;a[b] = &apos;b&apos;;a[c] = &apos;c&apos;;console.log(a[b]); 解析：考察的是对象的键名的转换 对象的键名只能是字符串和Symbol类型 其他类型的键名会被转换成字符串类型 对象转字符串默认会调用toString方法 //example112345678var a = &#123;&#125;, b = &apos;123&apos;, c = 123;a[b] = &apos;b&apos;;//c的键名会被转换为字符串&apos;123&apos;,这里会把上面的 b 覆盖掉a[c] = &apos;c&apos;;//输出cconsole.log(a[b]); //example212345678910var a = &#123;&#125;,b = Symbol(&apos;123&apos;), c = Symbol(&apos;123&apos;);//b是Symbol类型不需要转换a[b] = &apos;b&apos;;//c是Symbol类型不需要转换，而且每个Symbol类型的值都是不相等的，所以不会覆盖掉ba[c] = &apos;c&apos;;//输出bconsole.log(a[b]); //example3123456789101112var a = &#123;&#125;,b = &#123;key:&apos;123&apos;&#125;, c = &#123;key:&apos;456&apos;&#125;;//b不是字符串也不是Symbol类型，需要转换成字符串//对象类型会调用toString方法转化成字符串[object Object]a[b] = &apos;b&apos;;// c 不是字符串也不是 Symbol 类型，需要转换成字符串。// 对象类型会调用 toString 方法转换成字符串 [object Object]。这里会把 b 覆盖掉。a[c]=&apos;c&apos;; // 输出 cconsole.log(a[b]);]]></content>
+      <tags>
+        <tag>题</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[介绍下HTTPS中间人攻击]]></title>
+    <url>%2F2019%2F07%2F02%2F%E4%BB%8B%E7%BB%8D%E4%B8%8BHTTPS%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB%2F</url>
+    <content type="text"><![CDATA[中间人攻击过程如下： 服务器向客户端发送公钥 攻击者截获公钥，保留在自己手上 然后攻击者自己生成一个伪造的公钥，发送给客户端 客户端收到伪造的公钥后，生成加密的hash值发给服务器 攻击者获得加密hash值，用自己的私钥解密获得真密钥 同时生成假的加密hash值，发给服务器 服务器用私钥解密获得假私钥 服务器用假私钥加密传输信息 防范方法： 服务端在发送浏览器的公钥中加入CA证书，浏览器可以验证CA证书的有效性]]></content>
+      <tags>
+        <tag>网络</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[vue知识点or面试题]]></title>
     <url>%2F2019%2F07%2F02%2Fvue%E7%9F%A5%E8%AF%86%E7%82%B9or%E9%9D%A2%E8%AF%95%E9%A2%98%2F</url>
-    <content type="text"><![CDATA[vue.js的特点 简洁：页面由HTML模板+Json数据+Vue实例自称数据驱动:自动计算属性和追踪依赖的模板表达式组件化：用可复用，解耦的组件来构造页面轻量：代码量小，不依赖其他库快速：精确有效批量DOM更新模板友好：可通过npm,bower等多种方式安装，很容易融入 active-class是哪个组件的属性 vue-router模板的router-link组件 vue-router有哪几种导航钩子 三种。一种是全局导航钩子:router.beforeEach(to,from,next),作用：跳转前进行判断拦截第二种：组件内的钩子第三种：单独路由独享组件（需要补充完整） 请说出vue-cli项目中src目录每个文件夹和文件的用法 assets:静态资源componenets:放组件router：定义路由相关的配置view：视图app.vue:一个应用主组件main.js:入口文件 vue路由传参数 使用query方法传入的参数使用this.$route.query接受使用params方式传入的参数使用this.$route.params接受 delete和Vue.delete删除数组的区别 delete只是被删除的元素变成了empty/undefined其他的元素的键值还是不变。Vue.delete直接删除了数组，改变了数组的键值123456var a = [1,2,3,4]var b = [1,2,3,4]delete a[0]console.log(a) //[empty,2,3,4]this.$delete(b,0)console.log(b) //[2,3,4] vue中的ref是什么 ref被用来给元素或子组件注册引用信息。引用信息将会注册在父组件的$refs对象上。如果在普通的DOM元素上使用，引用指向的就是DOM元素；如果用在子组件上，引用就指向组件实例。 $route和$router的区别 $route是‘路由信息对象’，包括path,params,hash,query,fullPath,mached,name等路由信息参数$router是‘路由实例’对象包括了路由的跳转方法，钩子函数等]]></content>
+    <content type="text"><![CDATA[vue.js的特点 简洁：页面由HTML模板+Json数据+Vue实例自称数据驱动:自动计算属性和追踪依赖的模板表达式组件化：用可复用，解耦的组件来构造页面轻量：代码量小，不依赖其他库快速：精确有效批量DOM更新模板友好：可通过npm,bower等多种方式安装，很容易融入 active-class是哪个组件的属性 vue-router模板的router-link组件 vue-router有哪几种导航钩子 三种。一种是全局导航钩子:router.beforeEach(to,from,next),作用：跳转前进行判断拦截第二种：组件内的钩子第三种：单独路由独享组件（需要补充完整） 请说出vue-cli项目中src目录每个文件夹和文件的用法 assets:静态资源componenets:放组件router：定义路由相关的配置view：视图app.vue:一个应用主组件main.js:入口文件 vue路由传参数 使用query方法传入的参数使用this.$route.query接受使用params方式传入的参数使用this.$route.params接受 delete和Vue.delete删除数组的区别 delete只是被删除的元素变成了empty/undefined其他的元素的键值还是不变。Vue.delete直接删除了数组，改变了数组的键值123456var a = [1,2,3,4]var b = [1,2,3,4]delete a[0]console.log(a) //[empty,2,3,4]this.$delete(b,0)console.log(b) //[2,3,4] vue中的ref是什么 ref被用来给元素或子组件注册引用信息。引用信息将会注册在父组件的$refs对象上。如果在普通的DOM元素上使用，引用指向的就是DOM元素；如果用在子组件上，引用就指向组件实例。 $route和$router的区别 $route是‘路由信息对象’，包括path,params,hash,query,fullPath,mached,name等路由信息参数$router是‘路由实例’对象包括了路由的跳转方法，钩子函数等 vue在v-for时给每项元素绑定事件需要事件代理吗 不需要 但是可以使用 源码没有做事件代理参考 Vue的父组件和子组件生命周期执行顺序是什么 加载渲染过程：父beforeCreate-&gt; 父created -&gt; 父beforeMount -&gt; 子beforeCreate -&gt; 子created -&gt; 子beforeMount -&gt; 子mounted -&gt; 父mounted 子组件更新过程：父beforeUpdate -&gt; 子beforeUpdate -&gt; 子Updated -&gt; 父Updated 父组件更新过程： 父beforeUpdate -&gt; 父Updated 销毁过程： 父beforeDestroy -&gt; 子beforeDestroy -&gt; 子destroyed -&gt;父destroyed]]></content>
       <tags>
         <tag>vue</tag>
       </tags>

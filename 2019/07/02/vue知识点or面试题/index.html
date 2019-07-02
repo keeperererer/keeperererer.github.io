@@ -45,7 +45,7 @@
 </a>
         
         <!-- <span class="article-time">读完需要大约 -->
-        <!-- 1</span> -->
+        <!-- 2</span> -->
         <!-- <span>分钟</span> -->
       </div>
     
@@ -81,11 +81,22 @@
 <h3 id="route和-router的区别"><a href="#route和-router的区别" class="headerlink" title="$route和$router的区别"></a>$route和$router的区别</h3><blockquote>
 <p>$route是‘路由信息对象’，包括<code>path,params,hash,query,fullPath,mached,name</code>等路由信息参数<br>$router是‘路由实例’对象包括了路由的跳转方法，钩子函数等</p>
 </blockquote>
+<h3 id="vue在v-for时给每项元素绑定事件需要事件代理吗"><a href="#vue在v-for时给每项元素绑定事件需要事件代理吗" class="headerlink" title="vue在v-for时给每项元素绑定事件需要事件代理吗"></a>vue在v-for时给每项元素绑定事件需要事件代理吗</h3><blockquote>
+<p>不需要 但是可以使用 源码没有做事件代理<br><a href="https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/145" target="_blank" rel="noopener">参考</a></p>
+</blockquote>
+<h3 id="Vue的父组件和子组件生命周期执行顺序是什么"><a href="#Vue的父组件和子组件生命周期执行顺序是什么" class="headerlink" title="Vue的父组件和子组件生命周期执行顺序是什么"></a>Vue的父组件和子组件生命周期执行顺序是什么</h3><blockquote>
+<ul>
+<li>加载渲染过程：<code>父beforeCreate-&gt; 父created -&gt; 父beforeMount -&gt; 子beforeCreate -&gt; 子created -&gt; 子beforeMount -&gt; 子mounted -&gt; 父mounted</code></li>
+<li>子组件更新过程：<code>父beforeUpdate -&gt; 子beforeUpdate -&gt; 子Updated -&gt; 父Updated</code></li>
+<li>父组件更新过程： <code>父beforeUpdate -&gt; 父Updated</code></li>
+<li>销毁过程： <code>父beforeDestroy -&gt; 子beforeDestroy -&gt; 子destroyed -&gt;父destroyed</code></li>
+</ul>
+</blockquote>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/02/vue知识点or面试题/" data-id="cjxle4glu00037stul64rucwn" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/07/02/vue知识点or面试题/" data-id="cjxlv23vx0002dstuc8h0jata" class="article-share-link">分享</a>
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/">vue</a></li></ul>
 
@@ -96,6 +107,15 @@
   
     
   <nav class="article-nav">
+    
+      <a href="/2019/07/02/介绍下HTTPS中间人攻击/" class="article-nav-link">
+        <strong class="article-nav-caption">上篇</strong>
+        <div class="article-nav-title">
+          
+            介绍下HTTPS中间人攻击
+          
+        </div>
+      </a>
     
     
       <a href="/2019/06/05/js添加事件和移除事件-addEventListener与removeEventListener/" class="article-nav-link">
