@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    剖析Vue原理--实现双向绑定MVVM |
+    介绍下Promise.all使用、原理实现及错误处理 |
     
     Now you can see me</title>
   
@@ -23,7 +23,7 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-剖析Vue原理-实现双向绑定MVVM" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  <article id="post-介绍下Promise-all使用、原理实现及错误处理" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
     
@@ -31,7 +31,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      剖析Vue原理--实现双向绑定MVVM
+      介绍下Promise.all使用、原理实现及错误处理
     </h1>
   
 
@@ -40,8 +40,8 @@
 
     
       <div class="article-meta">
-        <a href="/2019/05/15/剖析Vue原理-实现双向绑定MVVM/" class="article-date">
-  <time datetime="2019-05-15T08:49:40.000Z" itemprop="datePublished">2019-05-15</time>
+        <a href="/2019/07/03/介绍下Promise-all使用、原理实现及错误处理/" class="article-date">
+  <time datetime="2019-07-03T14:32:19.000Z" itemprop="datePublished">2019-07-03</time>
 </a>
         
         <!-- <span class="article-time">读完需要大约 -->
@@ -56,16 +56,20 @@
       
 
       
-        <blockquote>
-<p><img src="https://segmentfault.com/a/1190000006599500#articleHeader6" alt></p>
-</blockquote>
+        <h3 id="Promise概念"><a href="#Promise概念" class="headerlink" title="Promise概念"></a>Promise概念</h3><a id="more"></a>
+<p>Promise是JS异步编程中的重要概念，异步抽象处理对象，是目前比较流行Javascript异步编程解决方案之一。Promise.all()接受一个由promise任务组成的数组，可以同时处理多个promise任务，当所有的任务都执行完成时，Promise.all()返回resolve，但当有一个失败(reject)，则返回失败的信息，即使其他promise执行成功，也会返回失败。</p>
+<h3 id="Promise-all如何使用"><a href="#Promise-all如何使用" class="headerlink" title="Promise.all如何使用"></a>Promise.all如何使用</h3><p>对于Promise.all(arr)来说，在参数数组中所有元素都变为决定态后，然后才返回新的promise。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//以下demo，请求两个url,当两个异步请求返回结果后，再请求第三个url</span><br><span class="line">const p1 = request(`http://some.url.1`)</span><br><span class="line">const p2 = request(`http://some.url.2`)</span><br><span class="line">Promise.all([p1, p2])</span><br><span class="line">  .then((datas) =&gt; &#123; // 此处 datas 为调用 p1, p2 后的结果的数组</span><br><span class="line">    return request(`http://some.url.3?a=$&#123;datas[0]&#125;&amp;b=$&#123;datas[1]&#125;`)</span><br><span class="line">  &#125;)</span><br><span class="line">  .then((data) =&gt; &#123;</span><br><span class="line">    console.log(msg)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<h3 id="Promise-all原理实现"><a href="#Promise-all原理实现" class="headerlink" title="Promise.all原理实现"></a>Promise.all原理实现</h3><p><code>`</code><br>function promiseAll(promise){<br>    return new Promise(function(resolve,reject){<br>        if(!Array.isArray(promises)){</p>
+<pre><code>    }
+})
+</code></pre><p>}</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/15/剖析Vue原理-实现双向绑定MVVM/" data-id="cjxndtnas000iagtun1lx3f4k" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/07/03/介绍下Promise-all使用、原理实现及错误处理/" data-id="cjxndtnam000dagtuzv4vq5b7" class="article-share-link">分享</a>
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/">vue</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es6/">es6</a></li></ul>
 
     </footer>
 
@@ -75,19 +79,19 @@
     
   <nav class="article-nav">
     
-      <a href="/2019/05/15/项目剖析/" class="article-nav-link">
+      <a href="/2019/07/03/分析比较opacity-0、visibility-hidden、display-none优劣和适用场景/" class="article-nav-link">
         <strong class="article-nav-caption">上篇</strong>
         <div class="article-nav-title">
           
-            项目剖析
+            分析比较opacity:0、visibility:hidden、display:none优劣和适用场景
           
         </div>
       </a>
     
     
-      <a href="/2019/05/15/周某收藏的一些网站/" class="article-nav-link">
+      <a href="/2019/07/03/css3之BFC-IFC-GFC和FFC/" class="article-nav-link">
         <strong class="article-nav-caption">下篇</strong>
-        <div class="article-nav-title">收藏的一些网站</div>
+        <div class="article-nav-title">css3之BFC,IFC,GFC和FFC</div>
       </a>
     
   </nav>
