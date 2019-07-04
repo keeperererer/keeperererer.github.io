@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[什么是防抖和节流？有什么区别？如何实现？]]></title>
+    <url>%2F2019%2F07%2F04%2F%E4%BB%80%E4%B9%88%E6%98%AF%E9%98%B2%E6%8A%96%E5%92%8C%E8%8A%82%E6%B5%81%EF%BC%9F%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%EF%BC%9F%2F</url>
+    <content type="text"><![CDATA[防抖 触发高频事件后n秒内函数只会执行一次，如果n秒内高频事件再次被触发，则重新计算时间 思路 每次触发事件时都取消之前的延时调用方法 12345678910111213141516function debounce(fn)&#123; let timeout = null;//创建一个标记用来存放定时器的返回值 return function()&#123; clearTimeout(timeout);//每当用户输入的时候把前一个setTimeout clear掉 timeout = setTimeout(()=&gt;&#123;//然后又创建一个新的setTimeout，这样就能保证输入字符后的interval间隔内如果还有字符输入的话，就不会执行fn函数 fn.apply(this,arguments); &#125;,500); &#125;;&#125;function sayHi()&#123; console.log(&apos;防抖成功&apos;)&#125;var inp = document.getElementById(&apos;inp&apos;);inp.addEventListener(&apos;input&apos;,debounce(sayHi));//防抖 节流 高频事件触发，但在n秒内指挥执行一次，所以节流会稀释函数的执行频率 思路 每次触发事件时都判断当前是否有等待执行的延时函数 12345678910111213141516function throttle(fn)&#123; let canRun = true;//通过闭包保存一个标记 return function()&#123; if(!canRun) return;//在函数开头判断标记是否为true,不为true则return canRun = false;//立即设置为false setTimeout(()=&gt;&#123;//将外部传入的函数的执行放在setTimeout中 fn.apply(this,arguments); //最后在setTimeout执行完毕后再把标记设置为true（关键）表示可以执行下一次循环了。当定时器没有执行的时候标记永远时false，再开头被return掉 canRun = true; &#125;,500) &#125;&#125;function sayHi(e)&#123; console.log(e.target.innerWidth,e.target.innerHeight);&#125;window.addEventListener(&apos;resize&apos;,throttle(sayHi));]]></content>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[分析比较opacity:0、visibility:hidden、display:none优劣和适用场景]]></title>
     <url>%2F2019%2F07%2F03%2F%E5%88%86%E6%9E%90%E6%AF%94%E8%BE%83opacity-0%E3%80%81visibility-hidden%E3%80%81display-none%E4%BC%98%E5%8A%A3%E5%92%8C%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF%2F</url>
     <content type="text"><![CDATA[结构： display:none; 会让元素完全从渲染树中消失，渲染的时候不占据任何空间，不能点击。visibility:hidden;不会让元素从渲染树消失，渲染元素继续占据空间，只是内容不可见，不能点击。opacity:0;不会让元素从渲染树消失，渲染元素继续占据空间，只是内容不可见，可以点击 继承：display: none和opacity: 0：是非继承属性，子孙节点消失由于元素从渲染树消失造成，通过修改子孙节点属性无法显示。visibility: hidden：是继承属性，子孙节点会由于继承了hidden而消失，通过设置visibility: visible;可以让子孙节点显式。 性能：display：none; 修改元素会造成文档回流,读屏器不会读取display: none元素内容，性能消耗较大visibility:hidden;修改元素只会造成本元素的重绘,性能消耗较少读屏器读取visibility: hidden元素内容opacity: 0 ;修改元素会造成重绘，性能消耗较少]]></content>
