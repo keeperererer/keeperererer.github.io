@@ -66,22 +66,22 @@
 <h3 id="原理过程"><a href="#原理过程" class="headerlink" title="原理过程"></a>原理过程</h3><p>这里描述一个按钮点击过程的处理。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">//业务代码</span><br><span class="line">var $test = document.getElementById(&apos;test&apos;)</span><br><span class="line">$test.addEventListener(&apos;click&apos;,function()&#123;</span><br><span class="line">	console.log(&apos;1 click&apos;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">//FastClick简单实现</span><br><span class="line">var targetElemet = null</span><br><span class="line">document.body.addEventListener(&apos;touchstart&apos;,function()&#123;</span><br><span class="line">	//记录点击的元素</span><br><span class="line">	targetElement = event.target</span><br><span class="line">&#125;)</span><br><span class="line">document.body.addEventListener(&apos;touchend&apos;,functoin(event)&#123;</span><br><span class="line">	//阻止默认事件(屏蔽之后的click事件)</span><br><span class="line">	event.preventDefault()</span><br><span class="line">	var touch = event.changedTouched[0]</span><br><span class="line">	//合成click事件，并添加可跟踪属性forwardedTouchEvent</span><br><span class="line">	 var clickEvent = document.createEvent(&apos;MouseEvents&apos;)</span><br><span class="line">    clickEvent.initMouseEvent(&apos;click&apos;, true, true, window, 1, touch.screenX, touch.screenY, touch.clientX, touch.clientY, false, false, false, false, 0, null)</span><br><span class="line">	clickEvent.forwardedTouchEvent = true //自定义的</span><br><span class="line">	targetElement.dispatchEvent(clickEvent)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
 <h3 id="这里进行过程说明"><a href="#这里进行过程说明" class="headerlink" title="这里进行过程说明"></a>这里进行过程说明</h3><ul>
 <li>业务正常使用click绑定事件</li>
-<li>在document.body绑定touchstart和touchend</li>
-</ul>
-<p><strong>stouchstart</strong><br>用于记录当前点击的元素targetElement;</p>
-<p><strong>touchend</strong></p>
+<li><p>在document.body绑定touchstart和touchend</p>
+<p>  <strong>stouchstart</strong><br>  用于记录当前点击的元素targetElement;</p>
+<p>  <strong>touchend</strong></p>
 <ul>
 <li>阻止默认事件(屏蔽之后的click事件)</li>
 <li>合成click事件，并添加可跟踪属性forwardedTouchEvent</li>
 <li>在targetElement上触发<code>click</code>事件</li>
 <li>targetElement上绑定的事件立即执行，完成FastCLick</li>
 </ul>
-<ul>
-<li>执行业务自己的click事件</li>
+</li>
+<li><p>执行业务自己的click事件</p>
+</li>
 </ul>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>touch事件先于mouse事件先于click执行，因此可以在document.body上绑定事件用于监听点触行为，根据需要模拟click触发真正需要响应的元素</p>
 <blockquote>
-<p>(转载于)[<a href="https://www.jianshu.com/p/05b142d84780]" target="_blank" rel="noopener">https://www.jianshu.com/p/05b142d84780]</a></p>
+<p><a href="https://www.jianshu.com/p/05b142d84780" target="_blank" rel="noopener">转载于</a></p>
 </blockquote>
 
       
