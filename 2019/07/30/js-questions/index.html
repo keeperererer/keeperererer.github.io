@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    js-questions |
+    
+    Now you can see me</title>
+  
+    <link rel="shortcut icon" href="/cat.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+</head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-js-questions" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      js-questions
+    </h1>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/07/30/js-questions/" class="article-date">
+  <time datetime="2019-07-30T10:21:12.000Z" itemprop="datePublished">2019-07-30</time>
+</a>
+        
+        <!-- <span class="article-time">读完需要大约 -->
+        <!-- 3</span> -->
+        <!-- <span>分钟</span> -->
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h3 id="1-哪一个是无效的？"><a href="#1-哪一个是无效的？" class="headerlink" title="1.哪一个是无效的？"></a>1.哪一个是无效的？</h3><a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">const bird = &#123;</span><br><span class="line">  size: &apos;small&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const mouse = &#123;</span><br><span class="line">  name: &apos;Mickey&apos;,</span><br><span class="line">  small: true</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">A: mouse.bird.size</span><br><span class="line">B: mouse[bird.size]</span><br><span class="line">C: mouse[bird[&quot;size&quot;]]</span><br><span class="line">D: All of them are valid</span><br></pre></td></tr></table></figure>
+<h4 id="答案-A"><a href="#答案-A" class="headerlink" title="答案: A"></a>答案: A</h4><p>在 JavaScript 中，所有对象的 keys 都是字符串（除非对象是 Symbol）。尽管我们可能不会定义它们为字符串，但它们在底层总会被转换为字符串。</p>
+<p><strong>当我们使用括号语法时（[]），JavaScript 会解释（或者 unboxes）语句。</strong>它首先看到第一个开始括号 [ 并继续前进直到找到结束括号 ]。只有这样，它才会计算语句的值。</p>
+<p>mouse[bird.size]：首先计算 bird.size，这会得到 small。mouse[“small”] 返回 true。</p>
+<p>然后使用点语法的话，上面这一切都不会发生。mouse 没有 bird 这个 key，这也就意味着 mouse.bird 是 undefined。然后当我们使用点语法 mouse.bird.size 时，因为 mouse.bird 是 undefined，这也就变成了 undefined.size。这个行为是无效的，并且会抛出一个错误类似 Cannot read property “size” of undefined。</p>
+<hr>
+<h3 id="2-输出是什么？"><a href="#2-输出是什么？" class="headerlink" title="2.输出是什么？"></a>2.输出是什么？</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class Chameleon &#123;</span><br><span class="line">  static colorChange(newColor) &#123;</span><br><span class="line">    this.newColor = newColor</span><br><span class="line">    return this.newColor</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  constructor(&#123; newColor = &apos;green&apos; &#125; = &#123;&#125;) &#123;</span><br><span class="line">    this.newColor = newColor</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const freddie = new Chameleon(&#123; newColor: &apos;purple&apos; &#125;)</span><br><span class="line">freddie.colorChange(&apos;orange&apos;)</span><br><span class="line">A: orange</span><br><span class="line">B: purple</span><br><span class="line">C: green</span><br><span class="line">D: TypeError</span><br></pre></td></tr></table></figure>
+<h4 id="答案-D"><a href="#答案-D" class="headerlink" title="答案: D"></a>答案: D</h4><p>colorChange 是一个静态方法。静态方法被设计为只能被创建它们的构造器使用（也就是 Chameleon），并且不能传递给实例。因为 freddie 是一个实例，静态方法不能被实例使用，因此抛出了 TypeError 错误。</p>
+<hr>
+<h3 id="3-当我门这么做时，会发生什么？"><a href="#3-当我门这么做时，会发生什么？" class="headerlink" title="3.当我门这么做时，会发生什么？"></a>3.当我门这么做时，会发生什么？</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function bark() &#123;</span><br><span class="line">  console.log(&apos;Woof!&apos;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">bark.animal = &apos;dog&apos;</span><br><span class="line">A: 正常运行!</span><br><span class="line">B: SyntaxError. 你不能通过这种方式给函数增加属性。</span><br><span class="line">C: undefined</span><br><span class="line">D: ReferenceError</span><br></pre></td></tr></table></figure>
+<h4 id="答案-A-1"><a href="#答案-A-1" class="headerlink" title="答案: A"></a>答案: A</h4><p>这在 JavaScript 中是可以的，因为函数是对象！（除了基本类型之外其他都是对象）</p>
+<p>函数是一个特殊的对象。你写的这个代码其实不是一个实际的函数。函数是一个拥有属性的对象，并且属性也可被调用。</p>
+<hr>
+<h3 id="4-输出是什么？"><a href="#4-输出是什么？" class="headerlink" title="4.输出是什么？"></a>4.输出是什么？</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function Person(firstName, lastName) &#123;</span><br><span class="line">  this.firstName = firstName;</span><br><span class="line">  this.lastName = lastName;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const member = new Person(&quot;Lydia&quot;, &quot;Hallie&quot;);</span><br><span class="line">Person.getFullName = function () &#123;</span><br><span class="line">  return `$&#123;this.firstName&#125; $&#123;this.lastName&#125;`;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">console.log(member.getFullName());</span><br><span class="line">A: TypeError</span><br><span class="line">B: SyntaxError</span><br><span class="line">C: Lydia Hallie</span><br><span class="line">D: undefined undefined</span><br></pre></td></tr></table></figure>
+<h4 id="答案-A-2"><a href="#答案-A-2" class="headerlink" title="答案: A"></a>答案: A</h4><p><strong>SyntaxError 对象代表尝试解析语法上不合法的代码的错误.<br>TypeError(类型错误) 对象用来表示值的类型非预期类型时发生的错误.</strong><br>你不能像常规对象那样，给构造函数添加属性。如果你想一次性给所有实例添加特性，你应该使用原型。因此本例中，使用如下方式：</p>
+<p>Person.prototype.getFullName = function () {<br>  return <code>${this.firstName} ${this.lastName}</code>;<br>}<br>这才会使 member.getFullName() 起作用。为什么这样做有什么优点？假设我们将这个方法添加到构造函数本身里。也许不是每个 Person 实例都需要这个方法。这将浪费大量内存空间，因为它们仍然具有该属性，这将占用每个实例的内存空间。相反，如果我们只将它添加到原型中，那么它只存在于内存中的一个位置，但是所有实例都可以访问它！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/07/30/js-questions/" data-id="cjyprkn110008a8tuizr499ov" class="article-share-link">分享</a>
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+    
+      <a href="/2019/07/29/FastClick原理浅析/" class="article-nav-link">
+        <strong class="article-nav-caption">下篇</strong>
+        <div class="article-nav-title">FastClick原理浅析</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <!-- <ul class="list-inline">
+      <li>&copy; 2019 Now you can see me</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul> -->
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/cat.svg" alt="Now you can see me"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/search.js"></script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>
