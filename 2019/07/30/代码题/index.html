@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    剖析Vue原理--实现双向绑定MVVM |
+    代码题 |
     
     Now you can see me</title>
   
@@ -23,7 +23,7 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-剖析Vue原理-实现双向绑定MVVM" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  <article id="post-代码题" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
     
@@ -31,7 +31,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      剖析Vue原理--实现双向绑定MVVM
+      代码题
     </h1>
   
 
@@ -40,8 +40,8 @@
 
     
       <div class="article-meta">
-        <a href="/2019/05/15/剖析Vue原理-实现双向绑定MVVM/" class="article-date">
-  <time datetime="2019-05-15T08:49:40.000Z" itemprop="datePublished">2019-05-15</time>
+        <a href="/2019/07/30/代码题/" class="article-date">
+  <time datetime="2019-07-30T12:31:48.000Z" itemprop="datePublished">2019-07-30</time>
 </a>
         
         <!-- <span class="article-time">读完需要大约 -->
@@ -56,17 +56,13 @@
       
 
       
-        <blockquote>
-<p><img src="https://segmentfault.com/a/1190000006599500#articleHeader6" alt></p>
-</blockquote>
-
+        <h3 id="1-将数组扁平化并去除其中重复数据，最终得到一个升序且不重复的数组"><a href="#1-将数组扁平化并去除其中重复数据，最终得到一个升序且不重复的数组" class="headerlink" title="1.将数组扁平化并去除其中重复数据，最终得到一个升序且不重复的数组"></a>1.将数组扁平化并去除其中重复数据，最终得到一个升序且不重复的数组</h3><p>已知如下数组：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [[<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">5</span>],[<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,[<span class="number">11</span>,<span class="number">12</span>,[<span class="number">12</span>,<span class="number">13</span>,[<span class="number">14</span>]]]],<span class="number">10</span>];</span><br></pre></td></tr></table></figure></p>
+<h4 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.from(<span class="keyword">new</span> <span class="built_in">Set</span>(arr.flat(<span class="literal">Infinity</span>))).sort(<span class="function">(<span class="params">a,b</span>) =&gt;</span> &#123; <span class="keyword">return</span> a-b&#125;)</span><br></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/15/剖析Vue原理-实现双向绑定MVVM/" data-id="cjypwvdxs0014pwtu6yjs4kqv" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/07/30/代码题/" data-id="cjypwvdxi000upwtu9hg994qu" class="article-share-link">分享</a>
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/">vue</a></li></ul>
-
     </footer>
 
   </div>
@@ -75,19 +71,10 @@
     
   <nav class="article-nav">
     
-      <a href="/2019/05/21/TODOLists/" class="article-nav-link">
-        <strong class="article-nav-caption">上篇</strong>
-        <div class="article-nav-title">
-          
-            TODOLists
-          
-        </div>
-      </a>
     
-    
-      <a href="/2019/05/15/周某收藏的一些网站/" class="article-nav-link">
+      <a href="/2019/07/30/js-questions/" class="article-nav-link">
         <strong class="article-nav-caption">下篇</strong>
-        <div class="article-nav-title">收藏的一些网站</div>
+        <div class="article-nav-title">js-questions</div>
       </a>
     
   </nav>
