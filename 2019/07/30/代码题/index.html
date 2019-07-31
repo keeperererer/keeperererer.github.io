@@ -56,12 +56,16 @@
       
 
       
-        <h3 id="1-将数组扁平化并去除其中重复数据，最终得到一个升序且不重复的数组"><a href="#1-将数组扁平化并去除其中重复数据，最终得到一个升序且不重复的数组" class="headerlink" title="1.将数组扁平化并去除其中重复数据，最终得到一个升序且不重复的数组"></a>1.将数组扁平化并去除其中重复数据，最终得到一个升序且不重复的数组</h3><p>已知如下数组：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [[<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">5</span>],[<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,[<span class="number">11</span>,<span class="number">12</span>,[<span class="number">12</span>,<span class="number">13</span>,[<span class="number">14</span>]]]],<span class="number">10</span>];</span><br></pre></td></tr></table></figure></p>
+        <h3 id="1-将数组扁平化并去除其中重复数据，最终得到一个升序且不重复的数组"><a href="#1-将数组扁平化并去除其中重复数据，最终得到一个升序且不重复的数组" class="headerlink" title="1.将数组扁平化并去除其中重复数据，最终得到一个升序且不重复的数组"></a>1.将数组扁平化并去除其中重复数据，最终得到一个升序且不重复的数组</h3><a id="more"></a>
+<p>已知如下数组：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [[<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">5</span>],[<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,[<span class="number">11</span>,<span class="number">12</span>,[<span class="number">12</span>,<span class="number">13</span>,[<span class="number">14</span>]]]],<span class="number">10</span>];</span><br></pre></td></tr></table></figure></p>
 <h4 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.from(<span class="keyword">new</span> <span class="built_in">Set</span>(arr.flat(<span class="literal">Infinity</span>))).sort(<span class="function">(<span class="params">a,b</span>) =&gt;</span> &#123; <span class="keyword">return</span> a-b&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.prototype.flat = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> [].concat(...this.map(<span class="function"><span class="params">item</span> =&gt;</span> (<span class="built_in">Array</span>.isArray(item) ? item.flat() : [item])));</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">Array</span>.prototype.unique = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> [...new <span class="built_in">Set</span>(<span class="keyword">this</span>)]</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> sort = <span class="function">(<span class="params">a,b</span>) =&gt;</span> a - b;</span><br><span class="line"><span class="built_in">console</span>.log(arr.flat().unique().sort(sort));</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1、扁平化数组</span></span><br><span class="line"><span class="keyword">var</span> flatArr = arr.toString().split(<span class="string">","</span>);</span><br><span class="line"><span class="comment">// 2、去重</span></span><br><span class="line"><span class="keyword">var</span> hash = &#123;&#125;;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, len = flatArr.length; i &lt; len; i++) &#123;</span><br><span class="line">hash[flatArr[i]] = <span class="string">"abc"</span></span><br><span class="line">&#125;</span><br><span class="line">flatArr = [];</span><br><span class="line"><span class="comment">// 3、将元素字符串转化为数字、遍历hash并不能保证输出顺序</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> hash) &#123;</span><br><span class="line">flatArr.push(+i)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 4、排序</span></span><br><span class="line">flatArr = flatArr.sort(<span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line"><span class="keyword">return</span> a - b</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(flatArr)</span><br></pre></td></tr></table></figure>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/30/代码题/" data-id="cjypwvdxi000upwtu9hg994qu" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/07/30/代码题/" data-id="cjyqzxkjh000rsotuhb0b1nvn" class="article-share-link">分享</a>
       
     </footer>
 
@@ -70,6 +74,15 @@
   
     
   <nav class="article-nav">
+    
+      <a href="/2019/07/31/判断数组的三个方法，介绍它们的区别/" class="article-nav-link">
+        <strong class="article-nav-caption">上篇</strong>
+        <div class="article-nav-title">
+          
+            判断数组的三个方法，介绍它们的区别
+          
+        </div>
+      </a>
     
     
       <a href="/2019/07/30/js-questions/" class="article-nav-link">
