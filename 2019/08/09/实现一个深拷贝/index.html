@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    实现一个深拷贝 |
+    
+    Now you can see me</title>
+  
+    <link rel="shortcut icon" href="/cat.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+</head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-实现一个深拷贝" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      实现一个深拷贝
+    </h1>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/08/09/实现一个深拷贝/" class="article-date">
+  <time datetime="2019-08-09T06:58:04.000Z" itemprop="datePublished">2019-08-09</time>
+</a>
+        
+        <!-- <span class="article-time">读完需要大约 -->
+        <!-- 5</span> -->
+        <!-- <span>分钟</span> -->
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h3 id="简单实现"><a href="#简单实现" class="headerlink" title="简单实现"></a>简单实现</h3><a id="more"></a>
+<p>其实深拷贝可以拆分为：浅拷贝+递归，浅拷贝时判断属性是否时对象，如果是对象就进行递归操作。<br>浅拷贝代码如下<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">cloneShallow</span>(<span class="params">source</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> target = &#123;&#125;;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> source)&#123;</span><br><span class="line">		<span class="keyword">if</span>(<span class="built_in">Object</span>.prototype.hasOwnProperty.call(source,key))&#123;</span><br><span class="line">			target[key] = source[key];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> target;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//测试用例</span></span><br><span class="line"><span class="keyword">var</span> a = &#123;</span><br><span class="line">	name: <span class="string">"muyiy"</span>,</span><br><span class="line">	book:&#123;</span><br><span class="line">		title:<span class="string">"You dont know JS"</span>,</span><br><span class="line">		price:<span class="string">"45"</span></span><br><span class="line">	&#125;,</span><br><span class="line">	a1:<span class="literal">undefined</span>,</span><br><span class="line">	a2:<span class="literal">null</span>,</span><br><span class="line">	a3:<span class="number">123</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> b = cloneShallow(a);</span><br><span class="line"></span><br><span class="line">a.name = <span class="string">"高级前端进阶"</span>;</span><br><span class="line">a.book.price = <span class="string">"55"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(b);</span><br><span class="line"><span class="comment">// &#123; </span></span><br><span class="line"><span class="comment">//   name: 'muyiy', </span></span><br><span class="line"><span class="comment">//   book: &#123; title: 'You Don\'t Know JS', price: '55' &#125;,</span></span><br><span class="line"><span class="comment">//   a1: undefined,</span></span><br><span class="line"><span class="comment">//   a2: null,</span></span><br><span class="line"><span class="comment">//   a3: 123</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>JavaScript中Object对象原型上的hasOwnProperty()用来判断一个属性是定义在对象本身而不是继承自原型链。<br>因为javascript没有将hasOwnProperty作为一个敏感词，所以我们很有可能将对象的一个属性命名为hasOwnProperty，这样一来就无法再使用对象原型的 hasOwnProperty 方法来判断属性是否是来自原型链。<br>所以要Object.prototype.hasOwnProperty指定是原型上的</p>
+<p>再上面的代码上，加上是否事对象的判断并在相应的位置使用递归就可以实现简单深拷贝<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">cloneDeep1</span>(<span class="params">source</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> target = &#123;&#125;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> source)&#123;</span><br><span class="line">		<span class="keyword">if</span>(<span class="built_in">Object</span>.prototype.hasOwnProperty.call(source,key))&#123;</span><br><span class="line">			<span class="keyword">if</span>(<span class="keyword">typeof</span> source[key] === <span class="string">'object'</span>)&#123;</span><br><span class="line">				target[key] = cloneDeep1(source[key]);</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				target[key] = source[key];</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> target;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用上面的测试用例测试一下</span></span><br><span class="line"><span class="keyword">var</span> b = cloneDeep1(a);</span><br><span class="line"><span class="built_in">console</span>.log(b);</span><br><span class="line"><span class="comment">// &#123; </span></span><br><span class="line"><span class="comment">//   name: 'muyiy', </span></span><br><span class="line"><span class="comment">//   book: &#123; title: 'You Don\'t Know JS', price: '45' &#125;, </span></span><br><span class="line"><span class="comment">//   a1: undefined,</span></span><br><span class="line"><span class="comment">//   a2: &#123;&#125;,</span></span><br><span class="line"><span class="comment">//   a3: 123</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>一个简单的深拷贝就完成了，但是这个实现还存在很多问题</p>
+<ul>
+<li>没有对传入参数进行校验，传入null时应该返回null而不是{}</li>
+<li>对于对象的判断逻辑不严谨，因为typeof null === ‘object’</li>
+<li>没有考虑数组的兼容</li>
+</ul>
+<h3 id="拷贝数组"><a href="#拷贝数组" class="headerlink" title="拷贝数组"></a>拷贝数组</h3><p>我们来看下对于对象的判断：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isObject</span>(<span class="params">obj</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">Object</span>.prototype.toString.call(obj) === <span class="string">'[object Object]'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是用在这里并不合适，因为我们要保留数组这种情况，所以这里使用typeof来处理<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typeof</span> <span class="literal">null</span> <span class="comment">//"object"</span></span><br><span class="line"><span class="keyword">typeof</span> &#123;&#125; <span class="comment">//"object"</span></span><br><span class="line"><span class="keyword">typeof</span> [] <span class="comment">//"object"</span></span><br><span class="line"><span class="keyword">typeof</span> <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;&#125; <span class="comment">//"function" (特殊情况)</span></span><br></pre></td></tr></table></figure></p>
+<p>改动过后的isObject判断逻辑如下<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isObject</span>(<span class="params">obj</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">typeof</span> obj === <span class="string">'object'</span> &amp;&amp; obj != <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>所以兼容数组的写法如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">cloneDeep2</span>(<span class="params">source</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!isObject(source)) <span class="keyword">return</span> source;<span class="comment">//非对象返回自身</span></span><br><span class="line">	<span class="keyword">var</span> target = <span class="built_in">Array</span>.isArray(source) ? [] : &#123;&#125;;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> source)&#123;</span><br><span class="line">		<span class="keyword">if</span>(<span class="built_in">Object</span>.prototype.hasOwnProperty.call(source,key))&#123;</span><br><span class="line">			<span class="keyword">if</span>(isObject(source[key]))&#123;</span><br><span class="line">				target[key] = cloneDeep2(source[key]);<span class="comment">//注意</span></span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				target[key] = source[key]</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> target;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 使用上面测试用例测试一下</span></span><br><span class="line"><span class="keyword">var</span> b = cloneDeep2(a);</span><br><span class="line"><span class="built_in">console</span>.log(b);</span><br><span class="line"><span class="comment">// &#123; </span></span><br><span class="line"><span class="comment">//   name: 'muyiy', </span></span><br><span class="line"><span class="comment">//   book: &#123; title: 'You Don\'t Know JS', price: '45' &#125;,</span></span><br><span class="line"><span class="comment">//   a1: undefined,</span></span><br><span class="line"><span class="comment">//   a2: null,</span></span><br><span class="line"><span class="comment">//   a3: 123</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="循环引用"><a href="#循环引用" class="headerlink" title="循环引用"></a>循环引用</h3><p>JSON无法深拷贝循环引用，遇到这种情况会抛出错误<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//a是文章开始的测试用例</span></span><br><span class="line">a.circleRef = a;</span><br><span class="line">JOSN.parse(<span class="built_in">JSON</span>.stringify(a));</span><br><span class="line"><span class="comment">//TypeError:Converting circular structure to JSON</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="使用哈希表"><a href="#使用哈希表" class="headerlink" title="使用哈希表"></a>使用哈希表</h4><hr>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 深拷贝</span></span><br><span class="line"><span class="comment"> * @param &#123;any&#125; object 被深拷贝的变量</span></span><br><span class="line"><span class="comment"> * @return: target 深拷贝后的变量</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deepclone</span>(<span class="params">object, hash = new WeakMap(</span>)) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(!isObject(object)) <span class="keyword">return</span> object;</span><br><span class="line">  <span class="comment">// hash处理循环引用</span></span><br><span class="line">  <span class="keyword">if</span>(hash.has(object)) <span class="keyword">return</span> hash.get(object);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> target = <span class="built_in">Array</span>.isArray(object) ? [] : &#123;&#125;;</span><br><span class="line">  <span class="keyword">let</span> value;</span><br><span class="line"></span><br><span class="line">  hash.set(object, target);</span><br><span class="line">  <span class="comment">// 拿到键值，包括symbol，但是不能遍历原型链，若要遍历使用for in</span></span><br><span class="line">  <span class="built_in">Reflect</span>.ownKeys(object).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    value = object[key];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(isObject(value)) &#123;</span><br><span class="line">      <span class="keyword">if</span>(<span class="built_in">Array</span>.isArray(value)) &#123;</span><br><span class="line">        <span class="keyword">let</span> array = initArray(value);</span><br><span class="line">        target[key] = copyArray(array, value, hash);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        target[key] = deepclone(value, hash);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      target[key] = value;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> target;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 判断是否为对象</span></span><br><span class="line"><span class="comment"> * @param &#123;any&#125; value 被判断目标</span></span><br><span class="line"><span class="comment"> * @return: bool 是否为对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isObject</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> type = <span class="keyword">typeof</span> value;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> value != <span class="literal">null</span> &amp;&amp; (type === <span class="string">'object'</span> || type === <span class="string">'function'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 生成指定长度数组</span></span><br><span class="line"><span class="comment"> * @param &#123;array&#125; array 被生成数组 </span></span><br><span class="line"><span class="comment"> * @return: result 生成的数组</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">initArray</span>(<span class="params">array</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; length &#125; = array;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> result = array.constructor(length);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 复制数组</span></span><br><span class="line"><span class="comment"> * @param &#123;array&#125; array 生成数组 </span></span><br><span class="line"><span class="comment"> * @param &#123;array&#125; value 被复制数组</span></span><br><span class="line"><span class="comment"> * @param &#123;hash&#125; hash 哈希表</span></span><br><span class="line"><span class="comment"> * @return: array 复制后的数组</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">copyArray</span>(<span class="params">array, value, hash</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> item;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span> ; i &lt; value.length ; i++) &#123;</span><br><span class="line">    item = value[i];</span><br><span class="line">    <span class="keyword">if</span>(!isObject(item)) &#123;</span><br><span class="line">      array[i] = item;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">if</span>(<span class="built_in">Array</span>.isArray(item)) &#123;</span><br><span class="line">        <span class="keyword">let</span> temp = initArray(item);</span><br><span class="line">        array[i] = copyArray(temp, item, hash);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        array[i] = deepclone(item, hash);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> array;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  deepclone,</span><br><span class="line">  initArray,</span><br><span class="line">  copyArray</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/08/09/实现一个深拷贝/" data-id="cjz6ff3wt001bk4tubmjql5or" class="article-share-link">分享</a>
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+      <a href="/2019/08/09/Object-assign原理及其实现/" class="article-nav-link">
+        <strong class="article-nav-caption">上篇</strong>
+        <div class="article-nav-title">
+          
+            Object.assign原理及其实现
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2019/08/03/为什么前端监控要用GIF打点？/" class="article-nav-link">
+        <strong class="article-nav-caption">下篇</strong>
+        <div class="article-nav-title">为什么前端监控要用GIF打点？</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <!-- <ul class="list-inline">
+      <li>&copy; 2019 Now you can see me</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul> -->
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/cat.svg" alt="Now you can see me"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/search.js"></script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>
