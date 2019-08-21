@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    事件模型 |
+    
+    Now you can see me</title>
+  
+    <link rel="shortcut icon" href="/cat.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+</head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-JS事件模型" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      事件模型
+    </h1>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/08/21/JS事件模型/" class="article-date">
+  <time datetime="2019-08-21T06:04:00.000Z" itemprop="datePublished">2019-08-21</time>
+</a>
+        
+        <!-- <span class="article-time">读完需要大约 -->
+        <!-- 5</span> -->
+        <!-- <span>分钟</span> -->
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h3 id="DOM-0级模型"><a href="#DOM-0级模型" class="headerlink" title="DOM 0级模型"></a>DOM 0级模型</h3><p>最简单且兼容所有浏览器的事件模型，有两种方式。默认发生在冒泡阶段。<br><a id="more"></a></p>
+<ul>
+<li><p>HTML中直接绑定（不推荐）</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;button id = <span class="string">"button"</span> onclick=<span class="string">"click()"</span>&gt; CLickMe&lt;/button&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>js指定属性值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> button = <span class="built_in">document</span>.getElementById(<span class="string">"button"</span>)</span><br><span class="line">button.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="DOM-2级模型"><a href="#DOM-2级模型" class="headerlink" title="DOM 2级模型"></a>DOM 2级模型</h3><p>属于W3C标准模型，先事件捕获，到达目标后再进行冒泡。兼容现代浏览器。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> button = <span class="built_in">document</span>.getElementById(<span class="string">'button'</span>)</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;,<span class="literal">false</span>)</span><br><span class="line"><span class="comment">//DOM 2级事件第三个参数是一个布尔值(默认为false),true表示捕获阶段调用事件处理程序，false表示冒泡阶段调用事件处理程序</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="DOM-0级和DOM-2级事件模型比较"><a href="#DOM-0级和DOM-2级事件模型比较" class="headerlink" title="DOM 0级和DOM 2级事件模型比较"></a>DOM 0级和DOM 2级事件模型比较</h3><ul>
+<li><p>移除监听函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//DOM 0</span></span><br><span class="line">button.onclick = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//DOM 2要跟绑定的格式完全一致</span></span><br><span class="line">button.removeEventListener(<span class="string">'click'</span>,click,<span class="literal">false</span>)</span><br><span class="line"><span class="comment">//addEventListener()添加的匿名函数无法移除</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>同时绑定多个监听器</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//DOM 0</span></span><br><span class="line">button.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="number">1</span>)</span><br><span class="line">&#125;</span><br><span class="line">button.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	 <span class="built_in">console</span>.log(<span class="number">2</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//DOM 2</span></span><br><span class="line">button.addEventListener(<span class="string">'click'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="number">3</span>)</span><br><span class="line">&#125;,<span class="literal">false</span>)</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="number">4</span>)</span><br><span class="line">&#125;,<span class="literal">false</span>)</span><br><span class="line"><span class="comment">//3</span></span><br><span class="line"><span class="comment">//4</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>可见DOM 0 后绑定的函数会把前边的替换掉，而DOM 2级可以同时绑定多个监听器，因此推荐使用addEventListener方法监听事件。<br>监听函数内部的this都指向触发事件的那个元素节点<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;button id=<span class="string">"button"</span> onclick=<span class="string">"console.log(this.id)"</span>&gt;&lt;/button&gt;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> button = document.getElementById(<span class="string">"button"</span>)</span><br><span class="line">button.onclick = function() &#123;</span><br><span class="line">	console.log(<span class="keyword">this</span>.id)</span><br><span class="line">&#125;</span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, function() &#123;</span><br><span class="line">    console.log(<span class="keyword">this</span>.id)</span><br><span class="line">&#125;, <span class="literal">false</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">//输出结果均为"button"</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="事件流"><a href="#事件流" class="headerlink" title="事件流"></a>事件流</h3><p>首先我们要先了解一下事件流。事件流描述的是在页面中接受的事件顺序。看下面的例子<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- HTML --&gt;</span><br><span class="line">&lt;div id=<span class="string">"container"</span>&gt;</span><br><span class="line">    &lt;button id=<span class="string">"button"</span>&gt;&lt;/button&gt;</span><br><span class="line">&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/JS</span></span><br><span class="line"><span class="regexp">var container = document.getElementById("container")</span></span><br><span class="line"><span class="regexp">var button = document.getElementById("button")</span></span><br><span class="line"><span class="regexp">button.onclick = function() &#123;alert('button!')&#125;</span></span><br><span class="line"><span class="regexp">container.onclick = function() &#123;alert('container!')&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>当你点击button按钮时，会发生在button按钮上的单击事件，但同时，你也单击了container元素甚至是单击了整个页面。JS事件模型是一种观察者模式（又叫发布订阅者模式），当对应的事件被触发时，监听该事件的所有监听函数都会被调用。因此，如果你单击的多个元素都绑定了相同事件，他们执行的事件顺序是怎么样的呢？</p>
+<p>事件流有两种：</p>
+<p>事件冒泡：事件开始时由最具体的元素（文档中嵌套层次最深的那个节点）接受，然后逐渐向上传播到较不具体的那个节点。</p>
+<p><button> -&gt; &lt;#container&gt; -&gt; <body> -&gt; <html> -&gt; document</html></body></button></p>
+<p>事件捕获：与事件冒泡相反。事件最开始由不太具体的节点最早接受事件, 而最具体的节点最后接受事件。</p>
+<p>document -&gt; <html> -&gt; <body> -&gt; &lt;#container&gt; -&gt; <button></button></body></html></p>
+<p>在这个例子中，事件是通过DOM 0级事件（默认发生在冒泡阶段）添加的，所以弹出button!后弹出container!。</p>
+<p>要让事件发生在捕获阶段也很简单<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//DOM 2级事件第三个参数是一个布尔值（默认为false），true表示捕获阶段调用事件处理程序，false表示冒泡阶段调用事件处理程序。</span></span><br><span class="line">button.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    alert(<span class="string">'button!'</span>)</span><br><span class="line">&#125;, <span class="literal">true</span>)</span><br><span class="line">container.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    alert(<span class="string">'container!'</span>)</span><br><span class="line">&#125;, <span class="literal">true</span>)</span><br></pre></td></tr></table></figure></p>
+<p>事件对象<br>触发DOM上的事件后，会产生一个事件对象event，作为参数传给监听函数。所有的事件都是这个事件对象的示例。</p>
+<p>事件对象常用属性<br>type 被触发的事件的类型<br>target 事件的目标<br>currentTarget 注册这个事件监听的对象<br>事件对象常用方法<br>preventDefault() 取消事件的默认行为<br>stopPropagation() 阻止事件继续传播（冒泡和捕获），不包括在当前节点上其他的事件监听函数。<br>stopImmediatePropagation() 阻止所有事件继续传播，包括在当前节点上其他的事件监听函数。<br>了解更多事件对象的属性和方法 事件对象</p>
+<p>看到这里，尝试一下实现页面内点击弹窗外部关闭弹窗，点击弹窗内部不会关闭弹窗。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;div id="pop-up-window"&gt;&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="keyword">var</span> body = document.querySelector(<span class="string">'body'</span>)</span><br><span class="line">    <span class="keyword">var</span> popUpWindow = document.getElementById(<span class="string">'pop-up-window'</span>)     </span><br><span class="line">    body.addEventListener(<span class="string">'click'</span>, function(e) &#123;</span><br><span class="line">        popUpWindow.style.display = <span class="string">'none'</span></span><br><span class="line">    &#125;, <span class="keyword">false</span>)</span><br><span class="line">    popUpWindow.addEventListener(<span class="string">'click'</span>, function(e) &#123;</span><br><span class="line">        e.stopPropagation() <span class="comment">//在弹窗内部点击时阻止事件传播，因此不会触发body的click事件</span></span><br><span class="line">    &#125;, <span class="keyword">false</span>)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p>事件委托<br>借助事件冒泡和事件对象，可以实现事件委托（又叫事件代理）。</p>
+<p>先思考如何给下面的按钮都绑定一个click事件，点击后输出按钮的id<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">    &lt;div id=<span class="string">"contiainer"</span>&gt;</span><br><span class="line">        &lt;button id="button1"&gt;button1&lt;/button&gt;</span><br><span class="line">        &lt;button id="button2"&gt;button2&lt;/button&gt;</span><br><span class="line">        &lt;button id="button3"&gt;button3&lt;/button&gt;</span><br><span class="line">        &lt;!-- ... --&gt;</span><br><span class="line">        &lt;button id="button10"&gt;button10&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line"><span class="comment">//或许你或你以前会这么写</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;</span><br><span class="line">    document.getElementById(<span class="string">"button"</span> + i).addEventListener(<span class="string">'click'</span>, function(e) &#123;</span><br><span class="line">        console.log(e.target.id)</span><br><span class="line">    &#125;, <span class="keyword">false</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//每个函数都是对象，都会占用内存，现在创建了10个监听事件，影响了页面性能。我们利用事件委托（又叫事件代理）可以解决这个问题。事件委托借助事件冒泡和事件对象，只需要创建一个监听器，就可以管理一个类型的所有事件。只需要在DOM树尽量最高的层次创建一个监听。</span></span><br><span class="line">document.getElementById(<span class="string">'container'</span>).addEventListener(<span class="string">'click'</span>, function(e) &#123;</span><br><span class="line">    <span class="keyword">if</span> (e.target.tagName.toLowerCase() === <span class="string">'button'</span>) console.log(e.target.id)</span><br><span class="line">&#125;, <span class="keyword">false</span>)</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/08/21/JS事件模型/" data-id="cjzkypkrz0002wotueiik2tus" class="article-share-link">分享</a>
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+    
+      <a href="/2019/08/15/观察者模式跟发布-订阅模式/" class="article-nav-link">
+        <strong class="article-nav-caption">下篇</strong>
+        <div class="article-nav-title">观察者模式跟发布-订阅模式</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <!-- <ul class="list-inline">
+      <li>&copy; 2019 Now you can see me</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul> -->
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/cat.svg" alt="Now you can see me"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/search.js"></script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>
