@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    为什么前端监控要用GIF打点？ |
+    单页面应用和多页面应用 |
     
     Now you can see me</title>
   
@@ -23,7 +23,7 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-为什么前端监控要用GIF打点？" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  <article id="post-单页面应用和多页面应用" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
     
@@ -31,7 +31,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      为什么前端监控要用GIF打点？
+      单页面应用和多页面应用
     </h1>
   
 
@@ -40,8 +40,8 @@
 
     
       <div class="article-meta">
-        <a href="/2019/08/03/为什么前端监控要用GIF打点？/" class="article-date">
-  <time datetime="2019-08-03T02:39:54.000Z" itemprop="datePublished">2019-08-03</time>
+        <a href="/2019/08/21/单页面应用和多页面应用/" class="article-date">
+  <time datetime="2019-08-21T08:15:14.000Z" itemprop="datePublished">2019-08-21</time>
 </a>
         
         <!-- <span class="article-time">读完需要大约 -->
@@ -56,21 +56,16 @@
       
 
       
-        <h3 id="为什么通常在发送数据埋点请求的时候使用的是-1x1-像素的透明-gif-图片？"><a href="#为什么通常在发送数据埋点请求的时候使用的是-1x1-像素的透明-gif-图片？" class="headerlink" title="为什么通常在发送数据埋点请求的时候使用的是 1x1 像素的透明 gif 图片？"></a>为什么通常在发送数据埋点请求的时候使用的是 1x1 像素的透明 gif 图片？</h3><a id="more"></a>
-<ul>
-<li>能够完成整个 HTTP 请求+响应（尽管不需要响应内容）</li>
-<li>触发 GET请求之后不需要获取和处理数据、服务器也不需要发送数据</li>
-<li>跨域友好</li>
-<li>执行过程无阻塞</li>
-<li>相比 XMLHttpRequest 对象发送 GET 请求，性能上更好</li>
-<li>GIF的最低合法体积最小（最小的BMP文件需要74个字节，PNG需要67个字节，而合法的GIF，只需要43个字节）</li>
-</ul>
-<p><a href="https://mp.weixin.qq.com/s/v6R2w26qZkEilXY0mPUBCw?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/v6R2w26qZkEilXY0mPUBCw?utm_source=tuicool&amp;utm_medium=referral</a></p>
+        <h3 id="单页面应用-SinglePage-Web-Application-SPA"><a href="#单页面应用-SinglePage-Web-Application-SPA" class="headerlink" title="单页面应用(SinglePage Web Application,SPA)"></a>单页面应用(SinglePage Web Application,SPA)</h3><a id="more"></a>
+<p>只有一张Web页面的应用，是一种从Web服务器加载的富客户端，单页面跳转仅刷新局部资源，公共资源(JS,CSS等)仅需加载一次，常用于PC端官网，购物等网站<br>如图：<br><img src="https://user-gold-cdn.xitu.io/2017/11/17/15fc93562b418a6e?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt></p>
+<h3 id="多页面应用-MultiPage-Application-MPA"><a href="#多页面应用-MultiPage-Application-MPA" class="headerlink" title="多页面应用(MultiPage Application,MPA)"></a>多页面应用(MultiPage Application,MPA)</h3><p>多页面跳转刷新所有资源，每个公共资源(JS,CSS等)需选择性重新加载，常用于app或客户端等<br>如图：<br><img src="https://user-gold-cdn.xitu.io/2017/11/17/15fc93684b5f10e1?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt></p>
+<p>具体对比分析：<br><img src="https://i.loli.net/2019/08/21/ZEkLJKPCBuFUglm.png" alt="1.png"></p>
+<h3 id="SPA设计原理"><a href="#SPA设计原理" class="headerlink" title="SPA设计原理"></a>SPA设计原理</h3><p>kk这个：<a href="https://github.com/livoras/blog/issues/3" target="_blank" rel="noopener">https://github.com/livoras/blog/issues/3</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/03/为什么前端监控要用GIF打点？/" data-id="cjzl29oji000v00tuulxk394i" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/08/21/单页面应用和多页面应用/" data-id="cjzl29okf001j00tu1ycqruyt" class="article-share-link">分享</a>
       
     </footer>
 
@@ -80,19 +75,10 @@
     
   <nav class="article-nav">
     
-      <a href="/2019/08/09/实现一个深拷贝/" class="article-nav-link">
-        <strong class="article-nav-caption">上篇</strong>
-        <div class="article-nav-title">
-          
-            实现一个深拷贝
-          
-        </div>
-      </a>
     
-    
-      <a href="/2019/08/02/前端安全/" class="article-nav-link">
+      <a href="/2019/08/21/JS事件模型/" class="article-nav-link">
         <strong class="article-nav-caption">下篇</strong>
-        <div class="article-nav-title">前端安全</div>
+        <div class="article-nav-title">事件模型</div>
       </a>
     
   </nav>
