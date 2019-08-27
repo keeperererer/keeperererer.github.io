@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    Object.assign原理及其实现 |
+    屏幕，浏览器，页面宽高 |
     
     Now you can see me</title>
   
@@ -23,7 +23,7 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-Object-assign原理及其实现" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  <article id="post-屏幕，浏览器，页面宽高" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
     
@@ -31,7 +31,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Object.assign原理及其实现
+      屏幕，浏览器，页面宽高
     </h1>
   
 
@@ -40,8 +40,8 @@
 
     
       <div class="article-meta">
-        <a href="/2019/08/09/Object-assign原理及其实现/" class="article-date">
-  <time datetime="2019-08-09T07:45:32.000Z" itemprop="datePublished">2019-08-09</time>
+        <a href="/2019/08/26/屏幕，浏览器，页面宽高/" class="article-date">
+  <time datetime="2019-08-26T06:40:32.000Z" itemprop="datePublished">2019-08-26</time>
 </a>
         
         <!-- <span class="article-time">读完需要大约 -->
@@ -56,11 +56,36 @@
       
 
       
-        
+        <blockquote>
+<p><a href="https://www.cnblogs.com/polk6/p/5051935.html" target="_blank" rel="noopener">HTML 获取屏幕、浏览器、页面的高度宽度</a><br><a href="https://imweb.io/topic/57c5409e808fd2fb204eef52" target="_blank" rel="noopener">搞清clientHeight、offsetHeight、scrollHeight、offsetTop、scrollTop</a></p>
+</blockquote>
+<a id="more"></a>
+<h3 id="scrollHeight"><a href="#scrollHeight" class="headerlink" title="scrollHeight"></a>scrollHeight</h3><p>scrollHeight含有scroll当然这个高度与滚动相关。</p>
+<ul>
+<li>读写：只读</li>
+<li><p>描述：包括overflow样式属性导致的视图中不可见内容，没有垂直滚动条的情况下，scrollHeight值与元素视图填充所有内容所需要的最小值clientHeight相同。包括元素的padding，但不包括元素的margin.</p>
+</li>
+<li><p>拓展：判定元素是否滚动到底<br>   如果元素滚动到底，下面等式返回true，没有则返回false.<br>  <code>element.scrollHeight - element.scrollTop === element.clientHeight</code></p>
+</li>
+</ul>
+<h3 id="scrollTop"><a href="#scrollTop" class="headerlink" title="scrollTop"></a>scrollTop</h3><ul>
+<li>读写：可读可写</li>
+<li><p>描述：这个Element.scrollTop 属性可以设置或者获取一个元素距离他容器顶部的像素距离。一个元素的 scrollTop 是可以去计算出这个元素距离它容器顶部的可见高度。当一个元素的容器没有产生垂直方向的滚动条,那它的 scrollTop 的值默认为0.</p>
+</li>
+<li><p>注意事项：scrollTop可以被设置任何的整数, 但以下情况会报错:</p>
+<ul>
+<li>如果一个元素不能被滚动 (e.g. 它没有益处容器或者 这个元素是不可滚动的), scrollTop被设置为0.</li>
+<li>设置scrollTop的值小于0，scrollTop 被设为0</li>
+<li>如果设置了超出这个容器可滚动的值, scrollTop 会被设为最大值.</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://i.loli.net/2019/08/26/Qitr4gDkIYv3XJK.png" alt="111.jpg"><br><img src="https://i.loli.net/2019/08/26/LpUC7dtrZ4f2TQg.png" alt="12.png"><img src="https://i.loli.net/2019/08/26/EdjD8rhu1BsNFmM.png" alt="13.png"></p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/09/Object-assign原理及其实现/" data-id="cjzt69zb5000be0tu9n5xqncq" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/08/26/屏幕，浏览器，页面宽高/" data-id="cjzt69zc4001ke0tudsg20qo0" class="article-share-link">分享</a>
       
     </footer>
 
@@ -70,19 +95,10 @@
     
   <nav class="article-nav">
     
-      <a href="/2019/08/11/Worker/" class="article-nav-link">
-        <strong class="article-nav-caption">上篇</strong>
-        <div class="article-nav-title">
-          
-            Service Worker
-          
-        </div>
-      </a>
     
-    
-      <a href="/2019/08/09/实现一个深拷贝/" class="article-nav-link">
+      <a href="/2019/08/26/JS操作cookie/" class="article-nav-link">
         <strong class="article-nav-caption">下篇</strong>
-        <div class="article-nav-title">实现一个深拷贝</div>
+        <div class="article-nav-title">JS操作cookie</div>
       </a>
     
   </nav>
