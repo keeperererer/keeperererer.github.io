@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    Vue中的computed实现原理 |
+    
+    Now you can see me</title>
+  
+    <link rel="shortcut icon" href="/cat.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+</head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-Vue中的computed实现原理" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Vue中的computed实现原理
+    </h1>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/08/31/Vue中的computed实现原理/" class="article-date">
+  <time datetime="2019-08-31T08:33:40.000Z" itemprop="datePublished">2019-08-31</time>
+</a>
+        
+        <!-- <span class="article-time">读完需要大约 -->
+        <!-- 2</span> -->
+        <!-- <span>分钟</span> -->
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h3 id="computed运行原理"><a href="#computed运行原理" class="headerlink" title="computed运行原理"></a>computed运行原理</h3><a id="more"></a>
+<ul>
+<li>computed的属性是动态挂载到vm实例上的，和普通的响应式数据在data里声明不同。</li>
+<li>设置computed的getter，如果执行了computed对应的函数，由于函数会读取data属性值，因此又会触发data属性值的getter函数，在这个执行过程中就可以处理computed相对于data的依赖收集关系。</li>
+<li>首次计算computed的值时，会执行vm.computed属性对应的getter函数(用户指定的computed函数，如果没有设置getter，那么将当前指定的函数赋值computed属性的getter)，进行上述的依赖收集</li>
+<li>如果computed的属性值又依赖了其他computed计算属性值，那么会将当前target暂存到栈中，先进行其他computed计算属性值的依赖收集，等其他计算属性依赖收集完成后，再从栈中pop出来，继续进行当前computed的依赖收集<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">	el:<span class="string">'#demo'</span>,</span><br><span class="line">	data:&#123;</span><br><span class="line">		firstName:<span class="string">"Foo"</span>,</span><br><span class="line">		lastName:<span class="string">"Bar"</span></span><br><span class="line">	&#125;,</span><br><span class="line">	computed:&#123;</span><br><span class="line">		fullName:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">this</span>.firstName + <span class="string">" "</span> +<span class="keyword">this</span>.lastName</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>由于this.firstName和this.lastName都是响应式变量，因此会触发它们的getter，根据我们之前的分析，它们会把自身持有的dep添加到当前正在计算的watcher中，这个时候Dep.target就是这个computed watcher,具体步骤如下：</p>
+<ul>
+<li>data属性初始化getter setter</li>
+<li>computed计算属性初始化，提供的函数将用作属性vm.fullName的getter</li>
+<li>当首次获取fullName计算属性的值时，Dep开始依赖收集</li>
+<li>在执行message getter方法时，如果Dep处于依赖收集状态，则判定firstName和lastName为fullName的依赖，并建立依赖关系</li>
+<li>当firstName或lastName发生变化时，根据依赖关系，触发fullName的重新计算</li>
+<li>如果计算值没有发生变化，不会触发视图更新</li>
+</ul>
+<p>通过以上的分析，我们知道计算属性本质上就是一个 computed watcher，也了解了它的创建过程和被访问触发 getter 以及依赖更新的过程，其实这是最新的计算属性的实现，之所以这么设计是因为 Vue 想确保不仅仅是计算属性依赖的值发生变化，而是当计算属性最终计算的值发生变化才会触发渲染 watcher 重新渲染，本质上是一种优化。</p>
+<h3 id="watch的实现原理"><a href="#watch的实现原理" class="headerlink" title="watch的实现原理"></a>watch的实现原理</h3><p>watch的分类：</p>
+<ul>
+<li>deep watch（深层次监听）</li>
+<li>user watch（用户监听）</li>
+<li>computed watcher（计算属性）</li>
+<li>sync watcher（同步监听）</li>
+</ul>
+<p>watch实现过程：<br>watch的初始化在data初始化之后（此时的data已经通过Object.defineProperty的设置成响应式）<br>watch的key会在Watcher里进行值的读取，也就是立马执行get获取value（从而实现data对应的key执行getter实现对于watch的依赖收集），此时如果有immediate属性那么立马执行watch对应的回调函数<br>当data对应的key发生变化时，触发user watch实现watch回调函数的执行</p>
+<p><a href="https://juejin.im/post/5d690c726fb9a06b155dd40d#heading-95" target="_blank" rel="noopener">原文</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/08/31/Vue中的computed实现原理/" data-id="ck01qoeio000bvwtuh8bgieii" class="article-share-link">分享</a>
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/">vue</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+      <a href="/2019/08/31/z-index/" class="article-nav-link">
+        <strong class="article-nav-caption">上篇</strong>
+        <div class="article-nav-title">
+          
+            z-index
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2019/08/27/小题/" class="article-nav-link">
+        <strong class="article-nav-caption">下篇</strong>
+        <div class="article-nav-title">小题</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <!-- <ul class="list-inline">
+      <li>&copy; 2019 Now you can see me</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul> -->
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/cat.svg" alt="Now you can see me"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/search.js"></script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>
