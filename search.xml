@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[离线缓存技术]]></title>
+    <url>%2F2019%2F09%2F04%2F%E7%A6%BB%E7%BA%BF%E7%BC%93%E5%AD%98%E6%8A%80%E6%9C%AF%2F</url>
+    <content type="text"><![CDATA[用途当客户端本地与web应用程序的服务器没有建立连接时，也能正常在客户端本地使用该web应用程序进行有关操作。文件等放在本地缓存中，当服务器没有和Internet建立连接时，也可以利用本地缓存中的资源文件正常运行web应用程序。 本地缓存与浏览器网页缓存的区别 本地缓存为整个web应用程序服务的，而浏览器的网页缓存只存在单个网页。 网页缓存不安全不可靠，因为我们不知道在网站中到底缓存了哪些网页，以及缓存了网页上的哪些资源。而本地缓存可靠，我们可以控制对哪些内容进行缓存，不对哪些内容进行缓存，开发人员还可以利用编程的手段来控制缓存的更新，利用缓存对象的各种属性、状态和事件来开发出更加强大的离线应用程序。 如何实现离线缓存 创建一个cache.manifest文件，并确保文件具有正确的内容 在服务器上设置内容类型 所有的html文件都指向cache.manifest 分析： cache.manifest文件1234567891011121314151617181920CACHE MANIFEST#version1CACHE:index.html404.htmlfavicon.icorobots.txthumans.txtapple-touch-icon.pngcss/normalize.min.csscss/main.csscss/bootmetro-icons.min.cssimg/pho-cat.jpgimg/pho-huangshan.jpg FALLBACK:online.js local.js NETWORK:* 注意事项： 1、第一行必须是”CACHE DMANIFEST”文字，以把本文件的作用告知浏览器，即对本地缓存中的资源文件进行具体设置。 2、在manifest文件中，可以加上注释来进行一些必要说明或解释。注释行以”#”文字开头。 3、在CACHE之后的部分为列出我们需要缓存的文件。 4、在FALLBACK之后的部分每一行中指定两个资源文件，第一个资源文件为能够在线访问时使用的资源文件，第二个资源文件为 不能在线访问时使用的备用资源文件。 5、在NETWORK之后可以指定在线白名单，即列出我们不希望离线存储的文件，因为通常它们的内容需要互联网访问才有意义。 另外，在此部分我们可以使用快捷方式：通配符*。这将告诉浏览器，应用服务器中获取没有在显示部分中提到的任何文件或URL。 服务器上设置内容类型让服务器支持text/cache-manifest这个MIME类型 设置HTML文件的指向1&lt;html manifest=”/cache.manifest” &gt; 注意事项：1、网站的每一个html页面都必须设置html元素的manifest属性。Must to do； 2、在你的整个网站应用中，只能有一个cache.manifest文件（建议放在网站根目录下）； 3、部分浏览器（如IE8-）不支持HTML5离线缓存； 4、“#” 开头的注释行可满足其他用途。应用的缓存会在其 manifest 文件更改时被更新。如果您编辑了一幅图片，或者修改了一个 JavaScript 函数， 这些改变都不会被重新缓存。更新注释行中的日期和版本号是一种使浏览器重新缓存文件的办法。 更新1.自动更新：浏览器除了在第一次访问 Web 应用时缓存资源外，只会在 cache manifest 文件本身发生变化（即使是注释变化）时更新缓存。而 cache manifest 中的资源文件发生变化并不会触发更新。2.手动更新：开发者也可以使用 window.applicationCache 的接口更新缓存。方法是检测 window.applicationCache.status 的值，如果是 UPDATEREADY，那么可以调用 window.applicationCache.update() 更新缓存。示范代码如下。123if (window.applicationCache.status == window.applicationCache.UPDATEREADY) ｛ window.applicationCache.update(); ｝]]></content>
+  </entry>
+  <entry>
+    <title><![CDATA[移动端页面适配方案]]></title>
+    <url>%2F2019%2F09%2F02%2F%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%A1%B5%E9%9D%A2%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88%2F</url>
+    <content type="text"><![CDATA[适配的目标 在不同尺寸的手机设备上，页面“相对性的达到合理的展示(自适应)”，或者“保持统一效果的等比缩放(看起来差不多)”。 概念理解viewport视口viewport是严格的等于浏览器的窗口。 先看看大佬们的文章,再自己好好总结 移动端适配方案(上) 移动端适配方案(下)使用Flexible实现手淘H5页面的终端适配移动前端开发之viewport的深入理解 移动端图片模糊问题移动端1px误差的原因以及解决方案移动端300ms延迟的解决方法]]></content>
+  </entry>
+  <entry>
     <title><![CDATA[z-index]]></title>
     <url>%2F2019%2F08%2F31%2Fz-index%2F</url>
     <content type="text"><![CDATA[z-index的默认值是auto;同级元素之间的比较：z-index:0的层叠关系大于z-index:auto;]]></content>
