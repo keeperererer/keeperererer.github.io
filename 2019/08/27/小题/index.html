@@ -45,7 +45,7 @@
 </a>
         
         <!-- <span class="article-time">读完需要大约 -->
-        <!-- 1</span> -->
+        <!-- 3</span> -->
         <!-- <span>分钟</span> -->
       </div>
     
@@ -69,11 +69,19 @@
 </ul>
 </li>
 </ul>
+<h3 id="为什么不能在state里直接修改状态"><a href="#为什么不能在state里直接修改状态" class="headerlink" title="为什么不能在state里直接修改状态"></a>为什么不能在state里直接修改状态</h3><p>因为state是实时更新的，mutations无法进行异步操作，而如果直接修改state的话是能够异步操作的，当你异步对state进行操作时，还没执行完，这时候如果state已经在其他地方被修改了，这样就会导致程序存在问题了。所以state要同步操作，通过mutations的方式限制了不允许异步。</p>
+<h3 id="定义在data里的变量a-为什么可以直接this-a调用，而不是this-data-a-this-data、this-data、this-xxx-为什么都能获取数据？"><a href="#定义在data里的变量a-为什么可以直接this-a调用，而不是this-data-a-this-data、this-data、this-xxx-为什么都能获取数据？" class="headerlink" title="定义在data里的变量a,为什么可以直接this.a调用，而不是this.data.a(this.$data、this._data、this.xxx 为什么都能获取数据？)"></a>定义在data里的变量a,为什么可以直接this.a调用，而不是this.data.a(this.$data、this._data、this.xxx 为什么都能获取数据？)</h3><p>this.$data.xxx、this._data.xxx、this.xxx 都能获取数据，先让 this.$data.xxx = this._data.xxx，然后用 call 让当前组件实例 this 继承了 this.$data 的值，也就是 getData 方法 return 出了一份用 call 改变指向将 $data 指向 this 的数据。</p>
+<h3 id="data为什么是个函数？"><a href="#data为什么是个函数？" class="headerlink" title="data为什么是个函数？"></a>data为什么是个函数？</h3><p>data 定义成一个函数，确保了各个组件实例能拥有一份只属于自己的唯一数据<br>如果 data 是个对象，那么整个vue实例将共享一份数据，也就是各个组件实例间可以随意修改其他组件的任意值，这就很坑爹了。<br>但是 data 定义成一个函数，将会 return 出一个唯一的对象，不会和其他组件共享一个对象。</p>
+<h3 id="使用Vuex只需执行-Vue-use-Vuex-，并在Vue的配置中传入一个store对象的示例，store是如何实现注入的？"><a href="#使用Vuex只需执行-Vue-use-Vuex-，并在Vue的配置中传入一个store对象的示例，store是如何实现注入的？" class="headerlink" title="使用Vuex只需执行 Vue.use(Vuex)，并在Vue的配置中传入一个store对象的示例，store是如何实现注入的？"></a>使用Vuex只需执行 Vue.use(Vuex)，并在Vue的配置中传入一个store对象的示例，store是如何实现注入的？</h3><p>Vue.use(Vuex) 方法执行的是install方法，它实现了Vue实例对象的init方法封装和注入，使传入的store对象被设置到Vue上下文环境的$store中。因此在Vue Component任意地方都能够通过this.$store访问到该store。</p>
+<h3 id="state内部支持模块配置和模块嵌套，如何实现的？"><a href="#state内部支持模块配置和模块嵌套，如何实现的？" class="headerlink" title="state内部支持模块配置和模块嵌套，如何实现的？"></a>state内部支持模块配置和模块嵌套，如何实现的？</h3><p>在store构造方法中有makeLocalContext方法，所有module都会有一个local context，根据配置时的path进行匹配。所以执行如dispatch(‘submitOrder’, payload)这类action时，默认的拿到都是module的local state，如果要访问最外层或者是其他module的state，只能从rootState按照path路径逐步进行访问。</p>
+<h3 id="在执行dispatch触发action-commit同理-的时候，只需传入-type-payload-，action执行函数中第一个参数store从哪里获取的？"><a href="#在执行dispatch触发action-commit同理-的时候，只需传入-type-payload-，action执行函数中第一个参数store从哪里获取的？" class="headerlink" title="在执行dispatch触发action(commit同理)的时候，只需传入(type, payload)，action执行函数中第一个参数store从哪里获取的？"></a>在执行dispatch触发action(commit同理)的时候，只需传入(type, payload)，action执行函数中第一个参数store从哪里获取的？</h3><p>store初始化时，所有配置的action和mutation以及getters均被封装过。在执行如dispatch(‘submitOrder’, payload)的时候，actions中type为submitOrder的所有处理方法都是被封装后的，其第一个参数为当前的store对象，所以能够获取到 { dispatch, commit, state, rootState } 等数据。</p>
+<h3 id="Vuex如何区分state是外部直接修改，还是通过mutation方法修改的？"><a href="#Vuex如何区分state是外部直接修改，还是通过mutation方法修改的？" class="headerlink" title="Vuex如何区分state是外部直接修改，还是通过mutation方法修改的？"></a>Vuex如何区分state是外部直接修改，还是通过mutation方法修改的？</h3><p>Vuex中修改state的唯一渠道就是执行 commit(‘xx’, payload) 方法，其底层通过执行 this._withCommit(fn) 设置_committing标志变量为true，然后才能修改state，修改完毕还需要还原_committing变量。外部修改虽然能够直接修改state，但是并没有修改_committing标志位，所以只要watch一下state，state change时判断是否_committing值为true，即可判断修改的合法性。</p>
+<h3 id="调试时的”时空穿梭”功能是如何实现的？"><a href="#调试时的”时空穿梭”功能是如何实现的？" class="headerlink" title="调试时的”时空穿梭”功能是如何实现的？"></a>调试时的”时空穿梭”功能是如何实现的？</h3><p>devtoolPlugin中提供了此功能。因为dev模式下所有的state change都会被记录下来，’时空穿梭’ 功能其实就是将当前的state替换为记录中某个时刻的state状态，利用 store.replaceState(targetState) 方法将执行this._vm.state = state 实现。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/27/小题/" data-id="ck04nnwxx001pvgtuy8gm58ig" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/08/27/小题/" data-id="ck06rygs6001rpotuz0jqu2mi" class="article-share-link">分享</a>
       
     </footer>
 
