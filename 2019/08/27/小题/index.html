@@ -45,7 +45,7 @@
 </a>
         
         <!-- <span class="article-time">读完需要大约 -->
-        <!-- 4</span> -->
+        <!-- 6</span> -->
         <!-- <span>分钟</span> -->
       </div>
     
@@ -80,11 +80,16 @@
 <h3 id="405-method-not-allowed"><a href="#405-method-not-allowed" class="headerlink" title="405 method not allowed"></a>405 method not allowed</h3><p>问题原因：  请求的方式（get、post、delete）方法与后台规定的方式不符合。</p>
 <p>比如： 后台方法规定的请求方式只接受get，如果用post请求，就会出现 405 method not allowed的提示</p>
 <h3 id="git-fetch-与-git-pull的区别"><a href="#git-fetch-与-git-pull的区别" class="headerlink" title="git fetch 与 git pull的区别"></a>git fetch 与 git pull的区别</h3><p>git fetch 相当于是从远程获取最新到本地，不会自动merge git pull：相当于是从远程获取最新版本并merge到本地 在实际使用中，git fetch更安全一些 </p>
-
+<h3 id="301和302对客户端有什么影响和区别"><a href="#301和302对客户端有什么影响和区别" class="headerlink" title="301和302对客户端有什么影响和区别"></a>301和302对客户端有什么影响和区别</h3><p>301永久性重定向<br>302暂时性重定向<br>301意味着客户端可以对结果进行缓存，搜索引擎或者浏览器都可以把跳转后的地址缓存下来，下一次不必发送这个请求。<br>SEO也更加友好。<br>SEO（搜索引擎优化）中提到一点：如果我们把一个地址采用301跳转方式跳转的话，搜索引擎会把老地址的PageRank等信息带到新地址，同时在搜索引擎索引库中彻底废弃掉原先的老地址。</p>
+<h3 id="appendChild-如果出现在循环中，如循环十次会产生十个新的节点还是就产生一个？"><a href="#appendChild-如果出现在循环中，如循环十次会产生十个新的节点还是就产生一个？" class="headerlink" title="appendChild()如果出现在循环中，如循环十次会产生十个新的节点还是就产生一个？"></a>appendChild()如果出现在循环中，如循环十次会产生十个新的节点还是就产生一个？</h3><p>就一个<br>这是因为这是在反复添加相同的元素。如果每次希望拥有一个新元素时,都需要调用document.createElement.</p>
+<h3 id="盒子模型，如果设置width-100px，那么盒子中各个部分的宽度多少"><a href="#盒子模型，如果设置width-100px，那么盒子中各个部分的宽度多少" class="headerlink" title="盒子模型，如果设置width=100px，那么盒子中各个部分的宽度多少"></a>盒子模型，如果设置width=100px，那么盒子中各个部分的宽度多少</h3><p>content(width)为100px<br>padding，border没设就没得<br>margin会把可视区域的宽度减去100px填充掉。</p>
+<h3 id="如果设置background-color-red，那么盒子模型各个部分的背景是什么情况？"><a href="#如果设置background-color-red，那么盒子模型各个部分的背景是什么情况？" class="headerlink" title="如果设置background-color: red，那么盒子模型各个部分的背景是什么情况？"></a>如果设置background-color: red，那么盒子模型各个部分的背景是什么情况？</h3><p>content(width）,padding都为red。<br>border颜色默认为color的颜色。<br>margin没得颜色。</p>
+<h3 id="nodeType"><a href="#nodeType" class="headerlink" title="nodeType"></a>nodeType</h3><p>元素节点 nodeType = 1<br>属性节点 nodeType = 2<br>文本节点 nodeType = 3<br>注释节点 nodeType = 8<br>文档节点 nodeType = 9<br>fragment节点 nodeType = 11</p>
+<h3 id="一些结果"><a href="#一些结果" class="headerlink" title="一些结果"></a>一些结果</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[,,,].join(<span class="string">", "</span>)</span><br><span class="line">--&gt; <span class="string">", ,"</span></span><br><span class="line"><span class="comment">//解析：[,,,]返回的是一个[undefinedx3]的数组。为什么是3个而不是4个，那是因为最后一个逗号因为最后一个元素没有被定义而被忽略了，类似于[1,2,3,]。</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123; &#125; </span><br><span class="line"><span class="keyword">var</span> oldName = foo.name; </span><br><span class="line">foo.name = <span class="string">"bar"</span>; </span><br><span class="line">[oldName, foo.name]</span><br><span class="line">--&gt;[<span class="string">'foo'</span>,<span class="string">'foo'</span>]</span><br><span class="line"><span class="comment">//foo.name是函数的名字,ECMA规定了foo.name这个值是可读不可写的</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">"epoch"</span>)</span><br><span class="line">--&gt;Invaild <span class="built_in">Date</span></span><br><span class="line"><span class="comment">//Date类解析字符串时间的格式是使用Date.parse函数的,parse 方法接受一个日期字符串,接受一个表示时间的字符串，返回相应的时间值。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a = <span class="built_in">Function</span>.length, b = <span class="keyword">new</span> <span class="built_in">Function</span>().length </span><br><span class="line">a === b</span><br><span class="line">--&gt; <span class="literal">false</span></span><br><span class="line"><span class="comment">//这个问题等同于问Function.length === Function.prototype.length。一个是Function自己参数的长度，一个是通过Function构造函数继承过来参数的长度。</span></span><br><span class="line"><span class="comment">//Function.length --&gt; 0</span></span><br><span class="line"><span class="comment">//Function.prototype.length --&gt; 1</span></span><br><span class="line"><span class="comment">//函数构造函数本身就是函数对象。它的length数据属性值为1。</span></span><br></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/27/小题/" data-id="ck06rygs6001rpotuz0jqu2mi" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2019/08/27/小题/" data-id="ck0kds4aq001pxctuchcygwpw" class="article-share-link">分享</a>
       
     </footer>
 
