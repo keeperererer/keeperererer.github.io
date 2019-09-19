@@ -57,6 +57,21 @@
 
       
         <p>z-index的默认值是auto;<br><a id="more"></a><br>同级元素之间的比较：<br>z-index:0的层叠关系大于z-index:auto;<br><img src="https://i.loli.net/2019/08/31/m89gBFVbvQYxTOw.png" alt="z-index.png"></p>
+<h3 id="如何产生"><a href="#如何产生" class="headerlink" title="如何产生"></a>如何产生</h3><p>触发一下条件则会产生层叠上下文：</p>
+<ul>
+<li>根元素 (HTML),</li>
+<li>z-index 值不为 “auto”的 绝对/相对定位，</li>
+<li>一个 z-index 值不为 “auto”的 flex 项目 (flex item)，即：父元素 display: flex|inline-flex，</li>
+<li>opacity 属性值小于 1 的元素（参考 the specification for opacity），</li>
+<li>transform 属性值不为 “none”的元素，</li>
+<li>mix-blend-mode 属性值不为 “normal”的元素，</li>
+<li>filter值不为“none”的元素，</li>
+<li>perspective值不为“none”的元素，</li>
+<li>isolation 属性被设置为 “isolate”的元素，</li>
+<li>position: fixed</li>
+<li>在 will-change 中指定了任意 CSS 属性，即便你没有直接指定这些属性的值（参考 这篇文章）</li>
+<li>-webkit-overflow-scrolling 属性被设置 “touch”的元素</li>
+</ul>
 
       
     </div>
