@@ -45,7 +45,7 @@
 </a>
         
         <!-- <span class="article-time">读完需要大约 -->
-        <!-- 12</span> -->
+        <!-- 13</span> -->
         <!-- <span>分钟</span> -->
       </div>
     
@@ -57,7 +57,7 @@
 
       
         <h3 id="1"><a href="#1" class="headerlink" title="1"></a>1</h3><a id="more"></a>
-<p>~number = -number + 1<br>eg: ~4 -&gt; -5</p>
+<p>~number = -number - 1<br>eg: ~4 -&gt; -5</p>
 <h3 id="简单请求"><a href="#简单请求" class="headerlink" title="简单请求"></a>简单请求</h3><ul>
 <li>请求方法是head,get,post之一</li>
 <li>http的头信息不超出一下几种字段<ul>
@@ -111,6 +111,10 @@
 <h4 id="description"><a href="#description" class="headerlink" title="description"></a>description</h4><p>description 描述标签提供了关于这个网页的总括性描述，如果网页摘要里的某个词语恰好出现在用户的查询里，那么这个词语将被高亮显示。<br>description 应该准确概括页面上的内容，并且不同的页面最好有不同的 description如果描述标签写的好，可以提升页面的点击率。例如掘金在主页是对整个掘金的整体描述，而在文章中的 description 则截取文章中开头的部分内容。<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name=<span class="string">"description"</span> content=<span class="string">"掘金是一个帮助开发者成长的社区，是给开发者用的 Hacker News，给设计师用的 Designer News，和给产品经理用的 Medium。掘金的技术文章由稀土上聚集的技术大牛和极客共同编辑为你筛选出最优质的干货，其中包括：Android、iOS、前端、后端等方面的内容。用户每天都可以在这里找到技术世界的头条内容。与此同时，掘金内还有沸点、掘金翻译计划、线下活动、专栏文章等内容。即使你是 GitHub、StackOverflow、开源中国的用户，我们相信你也可以在这里有所收获。"</span>&gt;</span><br></pre></td></tr></table></figure></p>
 <h4 id="keywords"><a href="#keywords" class="headerlink" title="keywords"></a>keywords</h4><p>keywords 关键词标签 对于页面优化来说重要性已经大不如前，不过对于 SEO 还是有一定的帮助，不要在 keywords 中堆砌太多关键词大概在 5-6 最佳并用 , 分隔开内容，这里以掘金的主页 keywords 为例子：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name=<span class="string">"keywords"</span> content=<span class="string">"掘金,稀土,Vue.js,微信小程序,Kotlin,RxJava,React Native,Wireshark,敏捷开发,Bootstrap,OKHttp,正则表达式,WebGL,Webpack,Docker,MVVM"</span>&gt;</span><br></pre></td></tr></table></figure></p>
 <p><a href="https://juejin.im/post/5ca53dfb6fb9a05e526d8ab7#heading-6" target="_blank" rel="noopener">详情</a></p>
+<h3 id="Ajax和form表单提交区别？"><a href="#Ajax和form表单提交区别？" class="headerlink" title="Ajax和form表单提交区别？"></a>Ajax和form表单提交区别？</h3><p>区别：<br>1.ajax在提交，请求，接收时，都是异步进行的，网页不需要刷新。<br>from表单提交时是新建一个页面，哪怕是提交给自己本身的页面，也是需要刷新的。</p>
+<p>2.ajax在提交时，是在后台新建一个请求。<br>from表单趋势放弃本页面，再次申请。</p>
+<p>3.ajax必须使用js来实现，不启用js的浏览器，无法完成操作。<br>from是浏览器的功能，无论是否开启js，都可以提交表单。</p>
+<p>4.ajax在提交，请求，接收时，整个过程都是需要使用程序来对其数据进行处理。<br>from提交时，是根据你的表单结构自动完成，不需要代码干预。</p>
 
       
     </div>
