@@ -45,7 +45,7 @@
 </a>
         
         <!-- <span class="article-time">读完需要大约 -->
-        <!-- 13</span> -->
+        <!-- 14</span> -->
         <!-- <span>分钟</span> -->
       </div>
     
@@ -115,7 +115,20 @@
 <p>2.ajax在提交时，是在后台新建一个请求。<br>from表单趋势放弃本页面，再次申请。</p>
 <p>3.ajax必须使用js来实现，不启用js的浏览器，无法完成操作。<br>from是浏览器的功能，无论是否开启js，都可以提交表单。</p>
 <p>4.ajax在提交，请求，接收时，整个过程都是需要使用程序来对其数据进行处理。<br>from提交时，是根据你的表单结构自动完成，不需要代码干预。</p>
-
+<h3 id="vue-nextTick"><a href="#vue-nextTick" class="headerlink" title="vue.nextTick()"></a>vue.nextTick()</h3><p>定义：在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。</p>
+<p>所以就衍生出了这个获取更新后的DOM的Vue方法。所以放在Vue.nextTick()回调函数中的执行的应该是会对DOM进行操作的 js代码；</p>
+<p>理解：nextTick()，是将回调函数延迟在下一次dom更新数据后调用，简单的理解是：当数据更新了，在dom中渲染后，自动执行该函数，</p>
+<h3 id="js函数调用的方法"><a href="#js函数调用的方法" class="headerlink" title="js函数调用的方法"></a>js函数调用的方法</h3><ul>
+<li>作为一个函数调用(直接调用函数，this指向全局对象window)</li>
+<li>函数作为方法调用(this指向该对象)</li>
+<li>使用构造函数调用函数(this的值在函数调用实例化对象时创建)</li>
+<li>作为函数方法调用函数(call,apply,bind可以设置this的值)</li>
+</ul>
+<h3 id="echarts数据量大页面卡顿"><a href="#echarts数据量大页面卡顿" class="headerlink" title="echarts数据量大页面卡顿"></a>echarts数据量大页面卡顿</h3><ul>
+<li>不要把echarts的声明放到data里面，可以放到全局或者option中设置</li>
+<li>在mounted()方法和destroy()方法之间加一个beforeDestroy()方法释放该页面的chart资源</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">beforeDestory()&#123;</span><br><span class="line">	<span class="keyword">this</span>.chart.clear()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
