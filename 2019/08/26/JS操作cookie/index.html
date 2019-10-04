@@ -45,7 +45,7 @@
 </a>
         
         <!-- <span class="article-time">读完需要大约 -->
-        <!-- 2</span> -->
+        <!-- 3</span> -->
         <!-- <span>分钟</span> -->
       </div>
     
@@ -69,6 +69,7 @@
 <li>http字段：cookie的httponly属性，若此属性为True，则只有在http请求头中会有此cookie信息，而不能通过document.cookie来访问此cookie。</li>
 <li>secure字段：设置是否只能通过https来传递此条cookie。</li>
 <li>expires/Max-Age字段：设置cookie超时时间。如果设置的值为一个时间，则当到达该时间时此cookie失效。不设置的话默认是session，意思是cookie会和session一起失效，当浏览器关闭（并不是浏览器标签关闭，而是整个浏览器关闭）后，cookie失效。</li>
+<li>SameSite:这个属性有两个可选值，分别是 Strict 和 Lax 。其中 Strict 为严格模式，另一个域发起的任何请求都不会携带该类型的 cookie，能够完美的阻止 CSRF 攻击，但是也可能带来了少许不便之处，例如通过一个导航网站的超链接打开另一个域的网页会因为没有携带 cookie 而导致没有登录等问题。因此 Lax 相对于 Strict 模式来说，放宽了一些。简单来说就是，用 「安全」的 HTTP 方法（GET、HEAD、OPTIONS 和 TRACE）改变了当前页面或者打开了新页面时，可以携带该类型的 cookie。</li>
 </ul>
 
       

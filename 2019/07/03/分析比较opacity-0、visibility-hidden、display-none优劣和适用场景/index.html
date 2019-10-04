@@ -59,7 +59,7 @@
         <h3 id="结构："><a href="#结构：" class="headerlink" title="结构："></a>结构：</h3><a id="more"></a>
 <p>display:none; 会让元素完全从渲染树中消失，渲染的时候不占据任何空间，不能点击。<br>visibility:hidden;不会让元素从渲染树消失，渲染元素继续占据空间，只是内容不可见，不能点击。<br>opacity:0;不会让元素从渲染树消失，渲染元素继续占据空间，只是内容不可见，可以点击</p>
 <h3 id="继承："><a href="#继承：" class="headerlink" title="继承："></a>继承：</h3><p>display: none和opacity: 0：是<strong>非继承属性</strong>，子孙节点消失由于元素从渲染树消失造成，通过<strong>修改子孙节点属性无法显示</strong>。<br>visibility: hidden：是<strong>继承属性</strong>，子孙节点会由于继承了hidden而消失，通过设置visibility: visible;<strong>可以让子孙节点显示</strong>。</p>
-<h3 id="性能："><a href="#性能：" class="headerlink" title="性能："></a>性能：</h3><p>display：none; 修改元素会造成文档回流,读屏器不会读取display: none元素内容，性能消耗较大<br>visibility:hidden;修改元素只会造成本元素的重绘,性能消耗较少读屏器读取visibility: hidden元素内容<br>opacity: 0 ;修改元素会造成重绘，性能消耗较少</p>
+<h3 id="性能："><a href="#性能：" class="headerlink" title="性能："></a>性能：</h3><p>display：none; 修改元素会造成文档回流,读屏器不会读取display: none元素内容，性能消耗较大<br>visibility:hidden;修改元素只会造成本元素的重绘,性能消耗较少读屏器读取visibility: hidden元素内容<br>opacity: 0 ;元素提升为合成层之后，opacity不会触发回流跟重绘。</p>
 
       
     </div>
