@@ -45,7 +45,7 @@
 </a>
         
         <!-- <span class="article-time">读完需要大约 -->
-        <!-- 14</span> -->
+        <!-- 18</span> -->
         <!-- <span>分钟</span> -->
       </div>
     
@@ -70,7 +70,8 @@
 </li>
 </ul>
 <h3 id="为什么不能在state里直接修改状态"><a href="#为什么不能在state里直接修改状态" class="headerlink" title="为什么不能在state里直接修改状态"></a>为什么不能在state里直接修改状态</h3><p>因为state是实时更新的，mutations无法进行异步操作，而如果直接修改state的话是能够异步操作的，当你异步对state进行操作时，还没执行完，这时候如果state已经在其他地方被修改了，这样就会导致程序存在问题了。所以state要同步操作，通过mutations的方式限制了不允许异步。</p>
-<h3 id="定义在data里的变量a-为什么可以直接this-a调用，而不是this-data-a-this-data、this-data、this-xxx-为什么都能获取数据？"><a href="#定义在data里的变量a-为什么可以直接this-a调用，而不是this-data-a-this-data、this-data、this-xxx-为什么都能获取数据？" class="headerlink" title="定义在data里的变量a,为什么可以直接this.a调用，而不是this.data.a(this.$data、this._data、this.xxx 为什么都能获取数据？)"></a>定义在data里的变量a,为什么可以直接this.a调用，而不是this.data.a(this.$data、this._data、this.xxx 为什么都能获取数据？)</h3><p>this.$data.xxx、this._data.xxx、this.xxx 都能获取数据，先让 this.$data.xxx = this._data.xxx，然后用 call 让当前组件实例 this 继承了 this.$data 的值，也就是 getData 方法 return 出了一份用 call 改变指向将 $data 指向 this 的数据。</p>
+<h3 id="定义在data里的变量a-为什么可以直接this-a调用，而不是this-data-a-this-data、this-data、this-xxx-为什么都能获取数据？"><a href="#定义在data里的变量a-为什么可以直接this-a调用，而不是this-data-a-this-data、this-data、this-xxx-为什么都能获取数据？" class="headerlink" title="定义在data里的变量a,为什么可以直接this.a调用，而不是this.data.a(this.$data、this._data、this.xxx 为什么都能获取数据？)"></a>定义在data里的变量a,为什么可以直接this.a调用，而不是this.data.a(this.$data、this._data、this.xxx 为什么都能获取数据？)</h3><p>其实这中间有一个代理的过程。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">_proxy(options.data);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_proxy</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> that = <span class="keyword">this</span>;</span><br><span class="line">    <span class="built_in">Object</span>.keys(data).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">Object</span>.defineProperty(that, key, &#123;</span><br><span class="line">            configurable: <span class="literal">true</span>,</span><br><span class="line">            enumerable: <span class="literal">true</span>,</span><br><span class="line">            <span class="keyword">get</span>: function proxyGetter () &#123;</span><br><span class="line">                <span class="keyword">return</span> that._data[key];</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="keyword">set</span>: function proxySetter (val) &#123;</span><br><span class="line">                that._data[key] = val;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>本质就是通过 Object.defineProperty 使在访问 this 上的某属性时从 this._data 中读取（写入）。</p>
 <h3 id="data为什么是个函数？"><a href="#data为什么是个函数？" class="headerlink" title="data为什么是个函数？"></a>data为什么是个函数？</h3><p>data 定义成一个函数，确保了各个组件实例能拥有一份只属于自己的唯一数据<br>如果 data 是个对象，那么整个vue实例将共享一份数据，也就是各个组件实例间可以随意修改其他组件的任意值，这就很坑爹了。<br>但是 data 定义成一个函数，将会 return 出一个唯一的对象，不会和其他组件共享一个对象。</p>
 <h3 id="使用Vuex只需执行-Vue-use-Vuex-，并在Vue的配置中传入一个store对象的示例，store是如何实现注入的？"><a href="#使用Vuex只需执行-Vue-use-Vuex-，并在Vue的配置中传入一个store对象的示例，store是如何实现注入的？" class="headerlink" title="使用Vuex只需执行 Vue.use(Vuex)，并在Vue的配置中传入一个store对象的示例，store是如何实现注入的？"></a>使用Vuex只需执行 Vue.use(Vuex)，并在Vue的配置中传入一个store对象的示例，store是如何实现注入的？</h3><p>Vue.use(Vuex) 方法执行的是install方法，它实现了Vue实例对象的init方法封装和注入，使传入的store对象被设置到Vue上下文环境的$store中。因此在Vue Component任意地方都能够通过this.$store访问到该store。</p>
 <h3 id="state内部支持模块配置和模块嵌套，如何实现的？"><a href="#state内部支持模块配置和模块嵌套，如何实现的？" class="headerlink" title="state内部支持模块配置和模块嵌套，如何实现的？"></a>state内部支持模块配置和模块嵌套，如何实现的？</h3><p>在store构造方法中有makeLocalContext方法，所有module都会有一个local context，根据配置时的path进行匹配。所以执行如dispatch(‘submitOrder’, payload)这类action时，默认的拿到都是module的local state，如果要访问最外层或者是其他module的state，只能从rootState按照path路径逐步进行访问。</p>
@@ -129,6 +130,72 @@
 <li>在mounted()方法和destroy()方法之间加一个beforeDestroy()方法释放该页面的chart资源</li>
 </ul>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">beforeDestory()&#123;</span><br><span class="line">	<span class="keyword">this</span>.chart.clear()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="vue-router有哪几种导航钩子"><a href="#vue-router有哪几种导航钩子" class="headerlink" title="vue-router有哪几种导航钩子"></a>vue-router有哪几种导航钩子</h3><p>第一种：是全局导航钩子：router.beforeEach(to,from,next)，作用：跳转前进行判断拦截<br>第二种：组件内的钩子<br>第三种：单独路由独享组件</p>
+<h3 id="多-3-行文本溢出变成省略号"><a href="#多-3-行文本溢出变成省略号" class="headerlink" title="多(3)行文本溢出变成省略号"></a>多(3)行文本溢出变成省略号</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">overflow : hidden;</span><br><span class="line">text-overflow: ellipsis;</span><br><span class="line">display: -webkit-box;</span><br><span class="line">-webkit-line-clamp: <span class="number">3</span>;</span><br><span class="line">-webkit-box-orient: vertical</span><br></pre></td></tr></table></figure>
+<h3 id="单行文本溢出变成省略号"><a href="#单行文本溢出变成省略号" class="headerlink" title="单行文本溢出变成省略号"></a>单行文本溢出变成省略号</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">overflow:hidden;</span><br><span class="line">text-overflow:ellipsis;</span><br><span class="line">white-space:nowrap;</span><br></pre></td></tr></table></figure>
+<h3 id="模块化"><a href="#模块化" class="headerlink" title="模块化"></a>模块化</h3><p>分类:<br>es6: import / export<br>commonjs: require / module.exports / exports<br>amd: require / defined</p>
+<p>require与import的区别<br>require支持 动态导入，import不支持，正在提案 (babel 下可支持)<br>require是 同步 导入，import属于 异步 导入<br>require是 值拷贝，导出值变化不会影响导入值；import指向 内存地址，导入值会随导出值而变化</p>
+<h3 id="vue-router-有哪几种导航钩子"><a href="#vue-router-有哪几种导航钩子" class="headerlink" title="vue-router 有哪几种导航钩子?"></a>vue-router 有哪几种导航钩子?</h3><p>三种:<br>全局导航钩子（跳转前进行判断拦截）<br>router.beforeEach(to, from, next),<br>router.beforeResolve(to, from, next),<br>router.afterEach(to, from ,next)</p>
+<p>组件内钩子<br>beforeRouteEnter<br>beforeRouteUpdate<br>beforeRouteLeave</p>
+<p>单独路由独享组件<br>beforeEnter</p>
+<h3 id="ES6模块和CommonJS模块的差异？"><a href="#ES6模块和CommonJS模块的差异？" class="headerlink" title="ES6模块和CommonJS模块的差异？"></a>ES6模块和CommonJS模块的差异？</h3><ul>
+<li><p>ES6模块在编译时，就能确定模块的依赖关系，以及输入和输出的变量。<br>CommonJS 模块，运行时加载。</p>
+</li>
+<li><p>ES6 模块自动采用严格模式，无论模块头部是否写了 “use strict”;</p>
+</li>
+<li><p>require 可以做动态加载，import 语句做不到，import 语句必须位于顶层作用域中。</p>
+</li>
+<li><p>ES6 模块中顶层的 this 指向 undefined，CommonJS 模块的顶层 this 指向当前模块。</p>
+</li>
+<li><p>CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。</p>
+</li>
+</ul>
+<h3 id="https连接的过程"><a href="#https连接的过程" class="headerlink" title="https连接的过程"></a>https连接的过程</h3><ul>
+<li>tcp通过三次握手建立连接</li>
+<li>发送客户端支持的加密协议及版本，ssl、tls</li>
+<li>服务器端从中筛选选择何是的加密协议</li>
+<li>服务器端返回证书，证书中有公钥</li>
+<li>客户端使用根证书验证证书合法性</li>
+<li>客户端生成对称密钥，通过证书中的公钥加密，发送到服务器端</li>
+<li>服务器端使用私钥解密，获取对称密钥，使用对称密钥加密数据</li>
+<li>客户端解密数据，SSL开始通信</li>
+</ul>
+<h3 id="css3动画与js动画"><a href="#css3动画与js动画" class="headerlink" title="css3动画与js动画"></a>css3动画与js动画</h3><h4 id="JS动画"><a href="#JS动画" class="headerlink" title="JS动画"></a>JS动画</h4><p>优点：</p>
+<ul>
+<li>js动画控制能力强，可以在动画过程中对动画进行精细控制，开始，暂停，终止，取消都是可以做到的。</li>
+<li>动画效果比css3动画丰富</li>
+<li>js动画大多没有兼容性问题</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>js动画的复杂度高于css3</li>
+<li>js在动画浏览器的主线程中执行，而主线程还有其他js脚本，样式计算，布局，绘制任务等，对其干扰可能出现阻塞从而出现丢帧的情况</li>
+<li>js动画往往需要频繁操作dom的css属性来实现视觉上的动画效果，这个时候浏览器要不停的执行重绘和重排，这对于性能的消耗是很大的，尤其是分配给浏览器的内存没那么宽裕的移动端。</li>
+</ul>
+<h4 id="css3动画"><a href="#css3动画" class="headerlink" title="css3动画"></a>css3动画</h4><p>优点：</p>
+<ul>
+<li>浏览器可以对动画进行优化</li>
+<li>部分效果可以强制使用硬件加速(通过GPU来提高动画性能)</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>运行进程控制较弱，css3动画只能在某些场景下控制动画的暂停与继续，不能再特定的位置添加回调函数</li>
+</ul>
+<h4 id="css动画比js动画流畅的前提"><a href="#css动画比js动画流畅的前提" class="headerlink" title="css动画比js动画流畅的前提"></a>css动画比js动画流畅的前提</h4><ul>
+<li>js在执行一些复杂的任务</li>
+<li>css动画比较少或者不触发pain和layout，即重绘和重排，例如通过改变如下属性生成的css动画<ul>
+<li>backface-visibility</li>
+<li>opacity</li>
+<li>perspective （设置元素视图）</li>
+<li>perspective-origin</li>
+<li>transfrom</li>
+</ul>
+</li>
+<li>部分属性能够启动3D加速和GPU硬件加速，例如使用transform的translateZ进行3D变换时</li>
+<li>在Chromium基础上的浏览器中，这个貌似是内核做了优化，当css动画知识改变transfrom和opacity时，整个CSS动画得以在compositor thread完成（而JS动画则会在main thread执行),这样css动画渲染不会影响主线程。</li>
+</ul>
+<h3 id="em"><a href="#em" class="headerlink" title="em"></a>em</h3><p>em相对于当前对象内文本的font-size。如果当前对象内文本的font-size计量单位也是em，则当前内文本的font-size的参考对象为父元素文本的font-size</p>
+
       
     </div>
     <footer class="article-footer">
