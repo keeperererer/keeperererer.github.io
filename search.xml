@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[毕设]]></title>
     <url>%2F2019%2F11%2F30%2F%E6%AF%95%E8%AE%BE%2F</url>
-    <content type="text"><![CDATA[vue中引入.svg图标，使用iconfont图标库vue中引入.svg图标，使用iconfont图标库 如何在Vue项目中使用vw实现移动端适配(转)如何在Vue项目中使用vw实现移动端适配(转) 在上面适配中整合mand-mobile报警告了，问题是content已经存在，请放弃覆盖它。解决方法：在postcssrc.js文件中的配置中过滤掉 不要为伪元素添加content123456"postcss-viewport-units": &#123; filterRule: rule =&gt; rule.selector.indexOf('::after') === -1 &amp;&amp; rule.selector.indexOf('::before') === -1 &amp;&amp; rule.selector.indexOf(':after') === -1 &amp;&amp; rule.selector.indexOf(':before') === -1&#125;]]></content>
+    <content type="text"><![CDATA[vue中引入.svg图标，使用iconfont图标库vue中引入.svg图标，使用iconfont图标库 如何在Vue项目中使用vw实现移动端适配(转)如何在Vue项目中使用vw实现移动端适配(转) 在上面适配中整合mand-mobile报警告了，问题是content已经存在，请放弃覆盖它。解决方法：在postcssrc.js文件中的配置中过滤掉 不要为伪元素添加content123456"postcss-viewport-units": &#123; filterRule: rule =&gt; rule.selector.indexOf('::after') === -1 &amp;&amp; rule.selector.indexOf('::before') === -1 &amp;&amp; rule.selector.indexOf(':after') === -1 &amp;&amp; rule.selector.indexOf(':before') === -1&#125; 在vue项目中添加看板娘的效果在vue项目中添加看板娘的效果其中js的链接是：1&lt;script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js"&gt;&lt;/script&gt;]]></content>
   </entry>
   <entry>
     <title><![CDATA[学习socket.io]]></title>
